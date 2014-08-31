@@ -1,3 +1,9 @@
+tatu-repo-devel (0.2) tatu; urgency=medium
+
+  * Added tatu-publish. 
+
+ -- Santiago Aguiar <santiago.aguiar@gmail.com>  Sun, 31 Aug 2014 23:33:20 +0000
+
 tatu-repo-devel (0.1) tatu; urgency=low
 
   * Initial Release.

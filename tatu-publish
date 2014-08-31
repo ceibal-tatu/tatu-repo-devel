@@ -1,0 +1,42 @@
+#!/bin/bash
+
+#
+# Copies a pdebuild output to the repository staging area, and adds the package to the repository.
+# 
+
+REPO_SERVER=tatu2
+REPO_USER=root
+REPO_BASEDIR=/srv/reprepro/ubuntu/
+REPO_CODENAME=tatu
+ARCH=i386
+VERSION=
+NAME=
+
+if [ -e ~/.taturepo ]; then
+    . ~/.taturepo
+fi
+
+while getopts ":a:n:v:" opt; do
+    case $opt in
+        a)
+            ARCH=$OPTARG
+            ;;
+        n)
+            NAME=$OPTARG
+            ;;
+        v)
+            VERSION=$OPTARG
+            ;;
+         \?)
+           echo "Invalid option: -$OPTARG" >&2
+           ;;
+    esac
+done
+
+if [ "$NAME" = "" ]; then
+    echo "Usage: $0 [-a ARCH] -n <package name> -v <version>" >&2
+    exit 1
+fi
+
+scp /var/cache/pbuilder/precise-i386/result/${NAME}_${VERSION}[_.]* $REPO_USER@$REPO_SERVER:staging/
+ssh $REPO_USER@$REPO_SERVER "reprepro --basedir ${REPO_BASEDIR} include ${REPO_CODENAME} staging/${NAME}_${VERSION}_${ARCH}.changes"

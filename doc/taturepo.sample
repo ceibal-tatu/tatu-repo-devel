@@ -1,0 +1,7 @@
+# Configuracion del repositorio Tatu. 
+# Copiar este archivo a ~/.taturepo
+
+REPO_SERVER=tatu
+REPO_USER=root
+REPO_BASEDIR=/srv/reprepro/ubuntu/
+REPO_CODENAME=tatu
