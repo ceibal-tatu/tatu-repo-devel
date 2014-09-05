@@ -1,0 +1,7 @@
+# Opciones por defecto para devscripts
+DEBEMAIL="builder@ceibal.edu.uy"
+DEBFULLNAME="Proyecto Ceibal"
+
+# Forzar lintian a reconocer tatu como un profile valido, evitando errores de lintian.
+LINTIAN_PROFILE="tatu"
+DEBUILD_LINTIAN_OPTS="--profile=tatu"

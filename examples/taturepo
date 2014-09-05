@@ -1,0 +1,14 @@
+# Configuracion del repositorio Tatu. 
+# Copiar este archivo a ~/.taturepo
+
+GIT_SERVER=github.com
+GIT_BASE=/ceibal-tatu/
+BUILD_USER=saguiar
+BUILD_SERVER=tatu
+BUILD_BASEDIR=/var/cache/pbuilder/
+BUILD_CODENAME=precise
+REPO_SERVER=tatu
+REPO_USER=root
+REPO_BASEDIR=/srv/reprepro/ubuntu/
+REPO_CODENAME=tatu
+REPO_WEBROOT=/srv/reprepro/
