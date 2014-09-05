@@ -2,7 +2,7 @@ Source: tatu-repo-devel
 Section: devel
 Priority: optional
 Maintainer: Santiago Aguiar <santiago.aguiar@gmail.com>
-Build-Depends: debhelper (>= 8.0.0)
+Build-Depends: debhelper (>= 9.0.0)
 Standards-Version: 3.9.5
 Vcs-Git: git://github.com/ceibal-tatu/tatu-repo-devel.git
 Vcs-Browser: https://github.com/ceibal-tatu/tatu-repo-devel/
@@ -11,4 +11,5 @@ Package: tatu-repo-devel
 Architecture: all
 Depends: ${misc:Depends}, wget, apt
 Description: Herramientas para Repositorio 
- Provee scripts y archivos de configuracion para construir paquetes para el repositorio Tatu.
+ Provee scripts y archivos de configuracion para construir paquetes para el 
+ repositorio Tatu.
