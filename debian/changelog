@@ -1,3 +1,10 @@
+tatu-repo-devel (0.3) tatu; urgency=medium
+
+  * Added tatu-setup.
+  * Updated tatu-publish to build from git. 
+
+ -- Santiago Aguiar <santiago.aguiar@gmail.com>  Fri, 05 Sep 2014 01:11:26 -0300
+
 tatu-repo-devel (0.2) tatu; urgency=medium
 
   * Added tatu-publish. 
