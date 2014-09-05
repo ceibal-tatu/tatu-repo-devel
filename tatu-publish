@@ -4,7 +4,7 @@
 # Copies a pdebuild output to the repository staging area, and adds the package to the repository.
 # 
 
-REPO_SERVER=tatu2
+REPO_SERVER=tatu
 REPO_USER=root
 REPO_BASEDIR=/srv/reprepro/ubuntu/
 REPO_CODENAME=tatu
@@ -38,5 +38,25 @@ if [ "$NAME" = "" ]; then
     exit 1
 fi
 
-scp /var/cache/pbuilder/precise-i386/result/${NAME}_${VERSION}[_.]* $REPO_USER@$REPO_SERVER:staging/
-ssh $REPO_USER@$REPO_SERVER "reprepro --basedir ${REPO_BASEDIR} include ${REPO_CODENAME} staging/${NAME}_${VERSION}_${ARCH}.changes"
+ssh -A ${BUILD_USER}@${BUILD_SERVER} 'bash -sh' <<EOF
+SOURCE_DIR=\`mktemp --tmpdir -d build-${NAME}_${VERSION}-XXXXXX\`
+echo \${SOURCE_DIR}
+cd \${SOURCE_DIR}
+git clone git://${GIT_SERVER}${GIT_BASE}${NAME}.git;
+cd ${NAME}
+sudo pdebuild
+rm -rf \${SOURCE_DIR}
+EOF
+[ $? -ne 0 ] && echo 'Git build failed.' >&2 && exit 1;
+
+scp ${BUILD_USER}@${BUILD_SERVER}:${BUILD_BASEDIR}/${BUILD_CODENAME}-${ARCH}/result/${NAME}_${VERSION}[_.]* ${REPO_USER}@${REPO_SERVER}:staging/
+
+if [ "${NAME}" == "tatu-repo" ]; then
+	ssh ${REPO_USER}@${REPO_SERVER} 'bash -sh'<<EOF
+cp staging/tatu-repo_${VERSION}_all.deb ${REPO_WEBROOT};
+ln -f -s ${REPO_WEBROOT}/tatu-repo_${VERSION}_all.deb ${REPO_WEBROOT}/tatu-repo.deb
+EOF
+fi
+
+[ $? -ne 0 ] && echo 'Copy to server staging area failed.' >&2 && exit 1;
+ssh ${REPO_USER}@${REPO_SERVER} "reprepro --basedir ${REPO_BASEDIR} include ${REPO_CODENAME} staging/${NAME}_${VERSION}_${ARCH}.changes"
