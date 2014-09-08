@@ -1,0 +1,56 @@
+#!/bin/sh
+
+#
+# Releases the package and tags the repository.
+# 
+
+if [ -e ~/.taturepo ]; then 
+	. ~/.taturepo
+fi
+
+if [ ! -d './debian' ]; then
+	echo "Error: No existe el directorio './debian'.\nEjecute el comando en la raíz del paquete." >&2 && exit 1;
+fi 
+
+if [ ! -e './debian/changelog' ]; then
+	echo "Error: No existe el archivo './debian/changelog'." >&2 && exit 1;
+fi 
+
+if [ ! -d './.git' ]; then
+	echo "Error: No es un repositorio de git." >&2 && exit 1;
+fi 
+
+if [ "$(git status --porcelain)" != "" ]; then
+	echo "Error: Hay cambios pendientes.\nEjecutar 'git status' para verlos.\nTodos los cambios deben ser revertidos/confirmados antes de hacer un release." >&2 && exit 1;
+fi
+
+if [ "$(dpkg-parsechangelog --show-field Distribution)" != "UNRELEASED" ]; then
+	echo "Error: El paquete no esta marcado como UNRELEASED.\nEjecute 'dch -i' para incrementar la version antes de hacer un release." >&2 && exit 1;
+fi
+
+CHANGELOG_DATE=$(stat --printf='%Y' ./debian/changelog)
+dch -r ${DCH_OPTIONS}
+if [ "${CHANGELOG_DATE}" -eq "$(stat --printf='%Y' ./debian/changelog)" ]; then
+	echo "Debe actualizar o grabar el archivo de changelog." >&2 && exit 1;
+fi
+
+if [ "$(dpkg-parsechangelog --show-field DISTRIBUTION)" = "UNRELEASED" ]; then
+	echo "El paquete no debe quedar marcado como UNRELEASED." >&2 && exit 1;
+fi
+
+NAME=${PWD##*/}
+VERSION=$(dpkg-parsechangelog --show-field Version)
+
+git add ./debian/changelog
+[ $? -ne 0 ] && exit 1;
+
+git commit -m "Updated changelog for release."
+[ $? -ne 0 ] && exit 1;
+
+git push
+[ $? -ne 0 ] && exit 1;
+
+git tag -s "${VERSION}" -m "Release of ${VERSION}"
+[ $? -ne 0 ] && exit 1;
+
+git push origin "${VERSION}"

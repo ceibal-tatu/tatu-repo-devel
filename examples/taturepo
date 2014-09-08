@@ -1,6 +1,9 @@
 # Configuracion del repositorio Tatu. 
 # Copiar este archivo a ~/.taturepo
 
+# Opciones para pasar por defecto a dch al ejecutar scripts de tatu.
+DCH_OPTIONS="--vendor tatu"
+
 GIT_SERVER=github.com
 GIT_BASE=/ceibal-tatu/
 BUILD_USER=saguiar

@@ -50,3 +50,6 @@ Agregar el paquete en 64 bits:
 
     reprepro --basedir /srv/reprepro/ubuntu/ include tatu /var/cache/pbuilder/precise-amd64/result/tatu_0.1_amd64.changes
 
+Importar claves de desarrolladores de paquetes:
+
+     gpg --import key.public.gpg
