@@ -1,8 +1,8 @@
-tatu-repo-devel (0.5) UNRELEASED; urgency=medium
+tatu-repo-devel (0.5) tatu; urgency=medium
 
   * Added tatu-release.
 
- -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Sun, 07 Sep 2014 21:12:08 -0300
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Sun, 07 Sep 2014 22:42:15 -0300
 
 tatu-repo-devel (0.4) tatu; urgency=medium
 
