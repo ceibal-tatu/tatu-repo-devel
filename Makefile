@@ -7,6 +7,7 @@ all:
 
 install: all
 	install -d $(DESTDIR)/usr/bin/
+	install -o root -g root -m 755 tatu-release $(DESTDIR)/usr/bin/
 	install -o root -g root -m 755 tatu-publish $(DESTDIR)/usr/bin/
 	install -o root -g root -m 755 tatu-setup $(DESTDIR)/usr/bin/
 	install -d $(PROFILE_DIR)
