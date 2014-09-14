@@ -1,8 +1,8 @@
-tatu-repo-devel (0.6) UNRELEASED; urgency=medium
+tatu-repo-devel (0.6) tatu; urgency=medium
 
-  * Consider tatu-repo-update. 
+  * Consider tatu-repo-update and install tatu-release.
 
- -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Sun, 14 Sep 2014 19:51:09 -0300
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Sun, 14 Sep 2014 19:54:06 -0300
 
 tatu-repo-devel (0.5) tatu; urgency=medium
 
