@@ -54,10 +54,10 @@ EOF
 
 scp ${BUILD_USER}@${BUILD_SERVER}:${BUILD_BASEDIR}/${BUILD_CODENAME}-${ARCH}/result/${NAME}_${VERSION}[_.]* ${REPO_USER}@${REPO_SERVER}:staging/
 
-if [ "${NAME}" = "tatu-repo" ]; then
+if [ "${NAME}" = "tatu-repo" -o "${NAME}" = "tatu-repo-update" ]; then
 	ssh ${REPO_USER}@${REPO_SERVER} 'bash -sh'<<EOF
-cp staging/tatu-repo_${VERSION}_all.deb ${REPO_WEBROOT};
-ln -f -s ${REPO_WEBROOT}/tatu-repo_${VERSION}_all.deb ${REPO_WEBROOT}/tatu-repo.deb
+cp staging/${NAME}_${VERSION}_all.deb ${REPO_WEBROOT};
+ln -f -s ${REPO_WEBROOT}/${NAME}_${VERSION}_all.deb ${REPO_WEBROOT}/${NAME}.deb
 EOF
 fi
 
