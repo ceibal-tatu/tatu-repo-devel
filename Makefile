@@ -6,6 +6,9 @@ VENDOR_DATA_DIR=$(LINTIAN_DIR)/vendors/$(VENDOR)/main/data
 all:
 
 install: all
+	install -d $(DESTDIR)/var/log/tatu-repo-devel/
+	install -d $(DESTDIR)/etc/
+	install -o root -g root -m 644 etc/* $(DESTDIR)/etc/
 	install -d $(DESTDIR)/usr/bin/
 	install -o root -g root -m 755 tatu-release $(DESTDIR)/usr/bin/
 	install -o root -g root -m 755 tatu-publish $(DESTDIR)/usr/bin/

@@ -4,10 +4,9 @@ if [ ! -e ~/.taturepo ]; then
     cp /usr/share/doc/tatu-repo-devel/examples/taturepo.sample ~/.taturepo
 fi
 
-if [ ! -e ~/.pbuilderrc ]; then
-    cp /usr/share/doc/tatu-repo-devel/examples/pbuilderrc ~/.pbuilderrc
-fi
-
 if [ ! -e ~/.devscripts ]; then
     cp /usr/share/doc/tatu-repo-devel/examples/devscripts ~/.devscripts
 fi
+
+/usr/sbin/pbuilder create --configfile /etc/pbuilderrc.amd64.tatu
+/usr/sbin/pbuilder create --configfile /etc/pbuilderrc.i386.tatu

@@ -1,0 +1,14 @@
+#!/bin/sh
+ 
+t=$(tempfile -p .upc. -s .list) || exit 1
+ 
+cat > $t << EOF
+/etc/pbuilderrc.amd64.tatu
+/etc/pbuilderrc.i386.tatu
+EOF
+ 
+parallel /usr/sbin/pbuilder update --configfile :::: $t | tee -a /var/log/tatu-repo-devel/pbuilder.log
+ 
+rm -f $t
+ 
+exit 0
