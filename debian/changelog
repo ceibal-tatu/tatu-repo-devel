@@ -1,4 +1,4 @@
-tatu-repo-devel (0.7) UNRELEASED; urgency=medium
+tatu-repo-devel (0.7) tatu; urgency=medium
 
   * Setup pbuilder on tatu-setup.
   * Run tatu-update-pbuilder from cron.
@@ -6,7 +6,7 @@ tatu-repo-devel (0.7) UNRELEASED; urgency=medium
   * tatu-release -f & -i options.
   * Install pbuilder configuration on /etc
 
- -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Sun, 14 Sep 2014 20:45:56 -0300
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Sun, 14 Sep 2014 22:04:06 -0300
 
 tatu-repo-devel (0.6) tatu; urgency=medium
 
