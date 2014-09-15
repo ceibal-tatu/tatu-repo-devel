@@ -39,6 +39,11 @@ fi
 
 ARCH_LIST=(${ARCH})
 
+if [ "${#ARCH_LIST[@]}" -lt 1 ]; then
+    echo "Must provide at least one architecture." >&2
+    exit 1
+fi
+
 ssh -A ${BUILD_USER}@${BUILD_SERVER} 'bash -sh' <<EOF
 # Create temporary folder for git clone
 SOURCE_DIR=\$(mktemp --tmpdir -d "build-${NAME}_${VERSION}-XXXXXX")
@@ -71,18 +76,18 @@ EOF
 
 # Copy built files to repository server for publishing.
 for arch in "${ARCH_LIST[@]}"; do
-	scp ${BUILD_USER}@${BUILD_SERVER}:${BUILD_BASEDIR}/${BUILD_CODENAME}-${arch}/result/${NAME}_${VERSION}[_.]* ${REPO_USER}@${REPO_SERVER}:staging/
+	scp ${BUILD_USER}@${BUILD_SERVER}:${BUILD_BASEDIR}/${BUILD_CODENAME}-${arch}/result/${NAME}_${VERSION}[_.]* ${REPO_USER}@${REPO_SERVER}:staging-${arch}/
 done
 
 # Copy tatu-repo & tatu-repo-update to HTTP server root folder, and link current published version.
 if [ "${NAME}" = "tatu-repo" -o "${NAME}" = "tatu-repo-update" ]; then
 	ssh ${REPO_USER}@${REPO_SERVER} 'bash -sh'<<EOF
-cp staging/${NAME}_${VERSION}_all.deb ${REPO_WEBROOT};
+cp staging-${ARCH_LIST[0]}/${NAME}_${VERSION}_all.deb ${REPO_WEBROOT};
 ln -f -s ${REPO_WEBROOT}/${NAME}_${VERSION}_all.deb ${REPO_WEBROOT}/${NAME}.deb
 EOF
 fi
 
 [ $? -ne 0 ] && echo 'Copy to server staging area failed.' >&2 && exit 1;
 for arch in "${ARCH_LIST[@]}"; do
-	ssh ${REPO_USER}@${REPO_SERVER} "reprepro --basedir ${REPO_BASEDIR} include ${REPO_CODENAME} staging/${NAME}_${VERSION}_${arch}.changes"
+	ssh ${REPO_USER}@${REPO_SERVER} "reprepro --basedir ${REPO_BASEDIR} include ${REPO_CODENAME} staging-${arch}/${NAME}_${VERSION}_${arch}.changes"
 done
