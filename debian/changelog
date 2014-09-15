@@ -1,3 +1,9 @@
+tatu-repo-devel (0.9) tatu; urgency=medium
+
+  * Do not pass --binary-arch on arch indep packages. 
+
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Sun, 14 Sep 2014 23:18:00 -0300
+
 tatu-repo-devel (0.8) tatu; urgency=medium
 
   * Fixed dependency. 
