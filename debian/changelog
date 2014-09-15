@@ -1,3 +1,9 @@
+tatu-repo-devel (0.8) tatu; urgency=medium
+
+  * Fixed dependency. 
+
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Sun, 14 Sep 2014 22:39:51 -0300
+
 tatu-repo-devel (0.7) tatu; urgency=medium
 
   * Setup pbuilder on tatu-setup.
