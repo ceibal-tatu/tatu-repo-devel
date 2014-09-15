@@ -60,12 +60,17 @@ if [ $? -ne 0 ]; then
 	echo "FIRMA INVALIDA. NO SE CONSTRUIRA EL PAQUETE." >&2 && exit 1;
 fi
 
+DPKG_BUILD_OPTS=""
+if [ "\$(grep "^\\s*Architecture:\\s*all\\s*\$" debian/control)" == "" ]; then
+	DPKG_BUILD_OPTS="--binary-arch"
+fi
+
 # Build base architecture.
 sudo ARCH="${ARCH_LIST[0]}" pdebuild
 
 # Build other architectures.
 for arch in "${ARCH_LIST[@]:1}"; do
-	sudo ARCH="\${arch}" pdebuild -- --binary-arch
+	sudo ARCH="\${arch}" pdebuild -- \${DPKG_BUILD_OPTS}
 done
 
 # Delete source folder.
