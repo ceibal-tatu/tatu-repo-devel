@@ -2,8 +2,8 @@
 
 #
 # Releases the package and tags the repository.
-# 
-
+#
+ 
 if [ -e ~/.taturepo ]; then 
 	. ~/.taturepo
 fi
@@ -19,7 +19,11 @@ while getopts ":fi" opt; do
       FORCE=1
       ;;
     \?)
-      echo "Usage: $0 [-f|-i]" >&2
+      cat >&2 <<USAGE
+Usage: $0 [-i|-f]
+    -i Increment changelog and then release.
+    -f Force tag creation even if changelog is not marked as UNRELEASED.
+USAGE
       exit 1
       ;;
   esac
