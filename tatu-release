@@ -8,6 +8,23 @@ if [ -e ~/.taturepo ]; then
 	. ~/.taturepo
 fi
 
+INCREMENT=0
+FORCE=0
+while getopts ":fi" opt; do
+  case $opt in
+    i)
+      INCREMENT=1
+      ;;
+    f)
+      FORCE=1
+      ;;
+    \?)
+      echo "Usage: $0 [-f|-i]" >&2
+      exit 1
+      ;;
+  esac
+done
+
 if [ ! -d './debian' ]; then
 	echo "Error: No existe el directorio './debian'.\nEjecute el comando en la raíz del paquete." >&2 && exit 1;
 fi 
@@ -24,8 +41,12 @@ if [ "$(git status --porcelain)" != "" ]; then
 	echo "Error: Hay cambios pendientes.\nEjecutar 'git status' para verlos.\nTodos los cambios deben ser revertidos/confirmados antes de hacer un release." >&2 && exit 1;
 fi
 
-if [ "$(dpkg-parsechangelog --show-field Distribution)" != "UNRELEASED" ]; then
-	echo "Error: El paquete no esta marcado como UNRELEASED.\nEjecute 'dch -i' para incrementar la version antes de hacer un release." >&2 && exit 1;
+if [ "${INCREMENT}" -eq 0 ]; then
+	if [ "$(dpkg-parsechangelog --show-field Distribution)" != "UNRELEASED" -a "$FORCE" -ne 1 ]; then
+		echo "Error: El paquete no esta marcado como UNRELEASED.\nEjecute 'dch -i' para incrementar la version antes de hacer un release." >&2 && exit 1;
+	fi
+else
+	dch -i ${DCH_OPTIONS}
 fi
 
 CHANGELOG_DATE=$(stat --printf='%Y' ./debian/changelog)
