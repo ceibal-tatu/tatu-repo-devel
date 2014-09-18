@@ -64,6 +64,7 @@ if [ ! -e ".gitignore" -a -d ".git" ]; then
 !.gitignore
 !debian
 !debian/*
+!debian/**/*
 !README.md
 !LICENSE
 GITIGNORE
