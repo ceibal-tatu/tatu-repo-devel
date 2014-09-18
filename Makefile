@@ -13,6 +13,10 @@ install: all
 	install -o root -g root -m 755 tatu-release $(DESTDIR)/usr/bin/
 	install -o root -g root -m 755 tatu-publish $(DESTDIR)/usr/bin/
 	install -o root -g root -m 755 tatu-setup $(DESTDIR)/usr/bin/
+	install -o root -g root -m 755 tatu-upstream-get $(DESTDIR)/usr/bin/
+	install -o root -g root -m 755 tatu-upstream-put $(DESTDIR)/usr/bin/
+	install -o root -g root -m 755 tatu-upstream-clean $(DESTDIR)/usr/bin/
+	install -o root -g root -m 755 tatu-update-pbuilder $(DESTDIR)/usr/bin/
 	install -d $(PROFILE_DIR)
 	install -o root -g root -m 644 main.profile $(PROFILE_DIR)/main.profile
 	install -d $(VENDOR_DATA_DIR)/changes-file/
