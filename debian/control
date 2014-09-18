@@ -9,7 +9,9 @@ Vcs-Browser: https://github.com/ceibal-tatu/tatu-repo-devel/
 
 Package: tatu-repo-devel
 Architecture: all
-Depends: ${misc:Depends}, wget, apt, parallel, pbuilder, devscripts, build-essential, debhelper, dpkg-dev
+Depends: ${misc:Depends}, wget, apt, parallel, pbuilder, devscripts, build-essential, debhelper, dpkg-dev, git, quilt
 Description: Herramientas para Repositorio 
  Provee scripts y archivos de configuracion para construir paquetes para el 
  repositorio Tatu.
+
+ Tambien incluye dependencias a utilitarios usados para construir paquetes debian.

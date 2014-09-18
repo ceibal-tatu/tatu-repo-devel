@@ -1,0 +1,41 @@
+#!/bin/bash
+
+#
+# Copies a .tar.gz file to the upstream/ path of the build server.
+# 
+
+BUILD_USER=devel
+BUILD_SERVER=taturepo1.ddns.net
+BUILD_UPSTREAM=/srv/reprepro/upstream/
+
+if [ -e ~/.taturepo ]; then
+    . ~/.taturepo
+fi
+
+while getopts ":n:v:" opt; do
+    case $opt in
+        n)
+            NAME=$OPTARG
+            ;;
+        v)
+            VERSION=$OPTARG
+            ;;
+         \?)
+           echo "Invalid option: -$OPTARG" >&2
+           ;;
+    esac
+done
+
+if [ -z "$NAME" -o -z "$VERSION" ]; then
+    echo "Usage: $0 -n <package name> -v <version>" >&2
+    exit 1
+fi
+
+UPSTREAM_SRC="${NAME}-${VERSION}.tar.gz"
+if [ ! -e "${UPSTREAM_SRC}" ]; then
+    echo "No se encontro el archivo ${FILENAME}"
+fi
+
+BUILD_HOST=${BUILD_USER}@${BUILD_SERVER}
+
+scp "${UPSTREAM_SRC}" "${BUILD_HOST}:${BUILD_UPSTREAM}/${UPSTREAM_SRC}"

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ ! -e ~/.taturepo ]; then
-    cp /usr/share/doc/tatu-repo-devel/examples/taturepo.sample ~/.taturepo
+    cp /usr/share/doc/tatu-repo-devel/examples/taturepo ~/.taturepo
 fi
 
 if [ ! -e ~/.devscripts ]; then
