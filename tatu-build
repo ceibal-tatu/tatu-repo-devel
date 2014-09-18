@@ -1,0 +1,86 @@
+#!/bin/bash
+
+unset CDPATH
+
+GIT_SERVER=github.com
+GIT_BASE=/ceibal-tatu/
+ARCH="i386 amd64"
+
+if [ -e ~/.taturepo ]; then
+    . ~/.taturepo
+fi
+
+while getopts ":a:n:v:" opt; do
+    case $opt in
+        a)
+            ARCH=$OPTARG
+            ;;
+        n)
+            NAME=$OPTARG
+            ;;
+        v)
+            VERSION=$OPTARG
+            ;;
+         \?)
+           echo "Invalid option: -$OPTARG" >&2
+           ;;
+    esac
+done
+
+if [ "$NAME" = "" -o "$VERSION" = "" ]; then
+    echo "Usage: $0 [-a ARCH] -n <package name> -v <version>" >&2
+    exit 1
+fi
+
+ARCH_LIST=(${ARCH})
+
+if [ "${#ARCH_LIST[@]}" -lt 1 ]; then
+    echo "Must provide at least one architecture." >&2
+    exit 1
+fi
+
+# Create temporary folder for git clone
+SOURCE_DIR=$(mktemp --tmpdir -d "build-${NAME}_${VERSION}-XXXXXX")
+echo "${SOURCE_DIR}"
+cd "${SOURCE_DIR}"
+
+# Get git repository
+git clone git://${GIT_SERVER}${GIT_BASE}${NAME}.git;
+cd "${NAME}"
+
+# Verify tag signature.
+git tag -v "${VERSION}"
+if [ $? -ne 0 ]; then
+	echo "FIRMA INVALIDA. NO SE CONSTRUIRA EL PAQUETE." >&2 && exit 1;
+fi
+
+ARCH_INDEP=1
+DPKG_BUILD_OPTS=""
+if [ "$(grep "^\\s*Architecture:\\s*all\\s*\$" debian/control)" == "" ]; then
+    ARCH_INDEP=0
+	DPKG_BUILD_OPTS="--binary-arch"
+fi
+
+if [ "$(grep "3.0 (quilt)" debian/source/format)" != "" ]; then
+    # Quilt package, get upstream source
+    UPSTREAM_VERSION=$(sed -e "s/\(.*\)-.*/\1/" <<< "${VERSION}")
+    if [ "$UPSTREAM_VERSION" == "" ]; then 
+        "No se puede determinar la version upstream para ${VERSION}."
+        exit 1
+    fi
+    tatu-upstream-get -n "${NAME}" -v "${VERSION}"
+fi
+
+
+# Build base architecture.
+sudo ARCH="${ARCH_LIST[0]}" pdebuild
+
+# Build other architectures.
+if [ "${ARCH_INDEP}" -eq 0 ]; then
+    for arch in "${ARCH_LIST[@]:1}"; do
+	    sudo ARCH="${arch}" pdebuild -- ${DPKG_BUILD_OPTS}
+    done
+fi
+
+# Delete source folder.
+rm -rf "${SOURCE_DIR}"
