@@ -13,5 +13,4 @@ Depends: ${misc:Depends}, wget, apt, parallel, pbuilder, devscripts, build-essen
 Description: Herramientas para Repositorio 
  Provee scripts y archivos de configuracion para construir paquetes para el 
  repositorio Tatu.
-
  Tambien incluye dependencias a utilitarios usados para construir paquetes debian.
