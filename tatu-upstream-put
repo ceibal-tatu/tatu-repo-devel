@@ -38,4 +38,10 @@ fi
 
 BUILD_HOST=${BUILD_USER}@${BUILD_SERVER}
 
+chmod 664 "{UPSTREAM_SRC}"
+if [ "$?" -ne 0 ]; then
+    echo "No se pudo cambiar los permisos del archivo a 664, necesario previo a la copia." >&2
+    exit 1
+fi
+
 scp "${UPSTREAM_SRC}" "${BUILD_HOST}:${BUILD_UPSTREAM}/${UPSTREAM_SRC}"
