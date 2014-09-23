@@ -7,7 +7,7 @@ cat > $t << EOF
 /etc/pbuilderrc.i386.tatu
 EOF
  
-parallel /usr/sbin/pbuilder update --configfile :::: $t | tee -a /var/log/tatu-repo-devel/pbuilder.log
+parallel /usr/sbin/cowbuilder --update --configfile :::: $t | tee -a /var/log/tatu-repo-devel/pbuilder.log
  
 rm -f $t
  
