@@ -10,6 +10,7 @@ install: all
 	install -d $(DESTDIR)/etc/
 	install -o root -g root -m 644 etc/* $(DESTDIR)/etc/
 	install -d $(DESTDIR)/usr/bin/
+	install -o root -g root -m 755 tatu-build $(DESTDIR)/usr/bin/
 	install -o root -g root -m 755 tatu-release $(DESTDIR)/usr/bin/
 	install -o root -g root -m 755 tatu-publish $(DESTDIR)/usr/bin/
 	install -o root -g root -m 755 tatu-setup $(DESTDIR)/usr/bin/
