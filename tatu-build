@@ -41,7 +41,6 @@ fi
 
 # Create temporary folder for git clone
 SOURCE_DIR=$(mktemp --tmpdir -d "build-${NAME}_${VERSION}-XXXXXX")
-echo "${SOURCE_DIR}"
 cd "${SOURCE_DIR}"
 
 # Get git repository
@@ -73,12 +72,12 @@ fi
 
 
 # Build base architecture.
-sudo ARCH="${ARCH_LIST[0]}" pdebuild
+sudo ARCH="${ARCH_LIST[0]}" pdebuild ${PDEBUILD_OPTIONS}
 
 # Build other architectures.
 if [ "${ARCH_INDEP}" -eq 0 ]; then
     for arch in "${ARCH_LIST[@]:1}"; do
-	    sudo ARCH="${arch}" pdebuild -- ${DPKG_BUILD_OPTS}
+	    sudo ARCH="${arch}" pdebuild ${PDEBUILD_OPTIONS} -- ${DPKG_BUILD_OPTS}
     done
 fi
 
