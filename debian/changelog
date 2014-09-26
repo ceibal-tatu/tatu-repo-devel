@@ -1,3 +1,9 @@
+tatu-repo-devel (0.14) tatu; urgency=medium
+
+  * Fixes to scripts. 
+
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Thu, 25 Sep 2014 23:58:17 -0300
+
 tatu-repo-devel (0.13) tatu; urgency=medium
 
   * Improved scripts. 
