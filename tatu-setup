@@ -18,7 +18,7 @@ if [ ! -e ~/.gbp.conf ]; then
 fi
 
 if [ ! -d /var/cache/pbuilder/ ]; then
-    mkdir /var/cache/pbuilder/{hooks,repo}
+    mkdir -p /var/cache/pbuilder/{hooks,repo}
     cp /usr/share/doc/tatu-repo-devel/examples/B10lintian /var/cache/pbuilder/hooks/
     chmod u+x /var/cache/pbuilder/hooks/B10lintian
     /usr/sbin/cowbuilder --create --configfile /etc/pbuilderrc.amd64.tatu
