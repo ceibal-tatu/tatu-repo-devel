@@ -20,7 +20,7 @@ if [ -f /etc/taturepo.conf ]; then
 fi
 
 if [ -f ~/.taturepo ]; then
-    . /.taturepo
+    . ~/.taturepo
 fi
 
 while getopts ":a:n:v:" opt; do

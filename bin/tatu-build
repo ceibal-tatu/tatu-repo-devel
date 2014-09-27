@@ -11,7 +11,7 @@ if [ -f /etc/taturepo.conf ]; then
 fi
 
 if [ -f ~/.taturepo ]; then
-    . /.taturepo
+    . ~/.taturepo
 fi
 
 LOCAL=0
