@@ -5,10 +5,6 @@ if [ "$UID" -ne 0 ]; then
     exit 1;
 fi
 
-if [ ! -e ~/.taturepo ]; then
-    cp /usr/share/doc/tatu-repo-devel/examples/taturepo ~/.taturepo
-fi
-
 if [ ! -e ~/.devscripts ]; then
     cp /usr/share/doc/tatu-repo-devel/examples/devscripts ~/.devscripts
 fi

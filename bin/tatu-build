@@ -6,8 +6,12 @@ GIT_SERVER=github.com
 GIT_BASE=/ceibal-tatu/
 ARCH="i386 amd64"
 
-if [ -e ~/.taturepo ]; then
-    . ~/.taturepo
+if [ -f /etc/taturepo.conf ]; then
+    . /etc/taturepo.conf
+fi
+
+if [ -f ~/.taturepo ]; then
+    . /.taturepo
 fi
 
 LOCAL=0

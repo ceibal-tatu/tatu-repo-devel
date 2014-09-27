@@ -3,9 +3,13 @@
 #
 # Releases the package and tags the repository.
 #
- 
-if [ -e ~/.taturepo ]; then 
-	. ~/.taturepo
+
+if [ -f /etc/taturepo.conf ]; then
+    . /etc/taturepo.conf
+fi
+
+if [ -f ~/.taturepo ]; then
+    . /.taturepo
 fi
 
 INCREMENT=0

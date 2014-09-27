@@ -15,8 +15,12 @@ ARCH="i386 amd64"
 VERSION=
 NAME=
 
-if [ -e ~/.taturepo ]; then
-    . ~/.taturepo
+if [ -f /etc/taturepo.conf ]; then
+    . /etc/taturepo.conf
+fi
+
+if [ -f ~/.taturepo ]; then
+    . /.taturepo
 fi
 
 while getopts ":a:n:v:" opt; do
