@@ -4,6 +4,7 @@
 # Opciones para pasar por defecto a dch al ejecutar scripts de tatu.
 DCH_OPTIONS="--vendor tatu"
 PDEBUILD_OPTIONS="--pbuilder cowbuilder"
+GBP_BUILD_OPTIONS=""
 
 GIT_SERVER=github.com
 GIT_BASE=/ceibal-tatu/

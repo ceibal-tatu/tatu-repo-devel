@@ -2,7 +2,10 @@
 
 unset CDPATH
 
+BUILD_USER=builder
+
 REPO_BASEDIR=/srv/reprepro/ubuntu
+REPO_USER=repo
 
 if [ -f /etc/taturepo.conf ]; then
     . /etc/taturepo.conf
@@ -21,6 +24,24 @@ EXAMPLES=/usr/share/doc/tatu-repo-devel/examples/
 if [[ ! -d ${EXAMPLES} ]]; then
     echo "No se encontro el directorio con los archivos de configuracion de ejemplo." >&2
     exit 1
+fi
+
+if ! id -u "${BUILD_USER}" > /dev/null; then
+    echo "Agregando usuario ${BUILD_USER}"
+    useradd -m -U "${BUILD_USER}"
+    if [[ $? -ne 0 ]]; then 
+        echo "Fallo al agregar usuario ${BUILD_USER}.">&2
+        exit 1
+    fi
+fi
+
+if ! id -u "${REPO_USER}" > /dev/null; then
+    echo "Agregando usuario ${REPO_USER}"
+    useradd -m -U "${REPO_USER}"
+    if [[ $? -ne 0 ]]; then 
+        echo "Fallo al agregar usuario ${REPO_USER}.">&2
+        exit 1
+    fi
 fi
 
 KEY_ID=""

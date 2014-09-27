@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 unset CDPATH
 
 GIT_SERVER=github.com
@@ -15,7 +17,8 @@ if [ -f ~/.taturepo ]; then
 fi
 
 LOCAL=0
-while getopts ":la:n:v:" opt; do
+CLEAN=0
+while getopts ":lca:n:v:" opt; do
     case $opt in
         a)
             ARCH=$OPTARG
@@ -29,6 +32,9 @@ while getopts ":la:n:v:" opt; do
         l)
             LOCAL=1
             ;;
+        c)
+            CLEAN=1
+            ;;
          \?)
            echo "Invalid option: -$OPTARG" >&2
            ;;
@@ -38,14 +44,15 @@ done
 
 if [[ $LOCAL -eq 0  && ($NAME == "" || $VERSION == "") ]]; then
     cat >&2 <<USAGE
-Usage: ${0} [-a ARCH] [-l | -n <package name> -v <version>]
+Usage: ${0} [-c] [-a ARCH] [-l | -n <package name> -v <version>]
     -a (optional) Architecture. Defaults to 'i386 amd64'.
+    -c (optional) Clean source folder if build for first architecture fails.
 GIVE  
     -l Build using the current folder.
 OR
     -n Name of the package. A git repository with that name will be cloned to 
        get the package sources.
-    -v Version of the package.
+    -v Version of the package (or 'latest' to use latest on master branch).
 USAGE
     exit 1
 fi
@@ -63,14 +70,20 @@ if [[ $LOCAL -eq 0 ]]; then
     SOURCE_DIR=$(mktemp --tmpdir -d "build-${NAME}_${VERSION}-XXXXXX")
     cd "${SOURCE_DIR}"
 
-    # Get git repository
-    git clone git://${GIT_SERVER}${GIT_BASE}${NAME}.git;
+    GIT_REPO="git://${GIT_SERVER}${GIT_BASE}${NAME}.git"
+    echo "Clonando ${GIT_REPO}..."
+    # Get git repository. Use git-buildpackage in case the repo was created with git-buildpackage.
+    gbp clone "${GIT_REPO}";
     cd "${NAME}"
-
-    # Verify tag signature.
-    git tag -v "${VERSION}"
-    if [ $? -ne 0 ]; then
-	    echo "FIRMA INVALIDA. NO SE CONSTRUIRA EL PAQUETE." >&2 && exit 1;
+    
+    # Checkout tag & verify signature.
+    if [[ $VERSION != "latest" ]]; then
+        echo "Obteniendo tag y verificando firma."
+        git checkout "tags/${VERSION}"
+        git tag -v "${VERSION}"
+        if [ $? -ne 0 ]; then
+            echo "FIRMA INVALIDA. NO SE CONSTRUIRA EL PAQUETE." >&2 && exit 1;
+        fi
     fi
 fi
 
@@ -81,26 +94,49 @@ if [ "$(grep "^\\s*Architecture:\\s*all\\s*\$" debian/control)" == "" ]; then
 	DPKG_BUILD_OPTS="--binary-arch"
 fi
 
-if [ "$(grep "3.0 (quilt)" debian/source/format)" != "" ]; then
-    # Quilt package, get upstream source
-    UPSTREAM_VERSION=$(sed -e "s/\(.*\)-.*/\1/" <<< "${VERSION}")
-    if [ "$UPSTREAM_VERSION" == "" ]; then 
-        "No se puede determinar la version upstream para ${VERSION}."
+echo "Construyendo paquete..."
+if git branch|grep "pristine-tar"; then
+    # Git-buildpackage like structure, use git-buildpackage instead of pdebuild
+    
+    # Build base architecture.
+    sudo GIT_PBUILDER_AUTOCONF=no ARCH="${ARCH_LIST[0]}" gbp buildpackage ${GBP_BUILD_OPTIONS}
+    if [[ $? -ne 0 ]]; then
+        "Fallo la construccion del paquete para la arquitecture '${ARCH_LIST[0]}'.">&2
+        if [[ $CLEAN -eq 1 ]]; then        
+            sudo rm -rf "${SOURCE_DIR}"
+        else
+            echo "Fuentes en '${SOURCE_DIR}'.">&2
+        fi
         exit 1
     fi
-    tatu-upstream-get -n "${NAME}" -v "${VERSION}"
-fi
 
+    # Build other architectures.
+    if [ "${ARCH_INDEP}" -eq 0 ]; then
+        for arch in "${ARCH_LIST[@]:1}"; do
+            sudo GIT_PBUILDER_AUTOCONF=no ARCH="${arch}" gbp buildpackage ${GBP_BUILD_OPTIONS}
+        done
+    fi
+else
+    if [ "$(grep "3.0 (quilt)" debian/source/format)" != "" ]; then
+        # Quilt package, get upstream source
+        UPSTREAM_VERSION=$(sed -e "s/\(.*\)-.*/\1/" <<< "${VERSION}")
+        if [ "$UPSTREAM_VERSION" == "" ]; then 
+            "No se puede determinar la version upstream para ${VERSION}."
+            exit 1
+        fi
+        tatu-upstream-get -n "${NAME}" -v "${VERSION}"
+    fi
 
-# Build base architecture.
-sudo ARCH="${ARCH_LIST[0]}" pdebuild ${PDEBUILD_OPTIONS}
+    # Build base architecture.
+    sudo ARCH="${ARCH_LIST[0]}" pdebuild ${PDEBUILD_OPTIONS}
 
-# Build other architectures.
-if [ "${ARCH_INDEP}" -eq 0 ]; then
-    for arch in "${ARCH_LIST[@]:1}"; do
-	    sudo ARCH="${arch}" pdebuild ${PDEBUILD_OPTIONS} -- ${DPKG_BUILD_OPTS}
-    done
+    # Build other architectures.
+    if [ "${ARCH_INDEP}" -eq 0 ]; then
+        for arch in "${ARCH_LIST[@]:1}"; do
+            sudo ARCH="${arch}" pdebuild ${PDEBUILD_OPTIONS} -- ${DPKG_BUILD_OPTS}
+        done
+    fi
 fi
 
 # Delete source folder.
-rm -rf "${SOURCE_DIR}"
+sudo rm -rf "${SOURCE_DIR}"
