@@ -2,7 +2,7 @@ tatu-repo-devel (0.18) tatu; urgency=medium
 
   * Added support for gbp buildpackage on tatu-build. 
 
- -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Sat, 27 Sep 2014 11:40:00 -0300
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Sat, 27 Sep 2014 11:40:23 -0300
 
 tatu-repo-devel (0.17) tatu; urgency=medium
 
