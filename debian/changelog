@@ -1,3 +1,10 @@
+tatu-repo-devel (0.17) tatu; urgency=medium
+
+  * Added script to create a Tatu repo server. 
+  * Fixed paths to per-user config file on scripts.
+
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Sat, 27 Sep 2014 09:55:15 -0300
+
 tatu-repo-devel (0.16) tatu; urgency=medium
 
   * Added global configuration. 
