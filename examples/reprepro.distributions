@@ -1,0 +1,24 @@
+Origin: Proyecto Ceibal
+Suite: release
+Codename: tatu
+Label: Repositorio Tatu
+Architectures: i386 amd64 source
+Components: main
+Description: Repositorio Tatu para Plan Ceibal.
+SignWith: //KEY_ID//
+
+Origin: Proyecto Ceibal
+Suite: test
+Codename: tatu-test
+Label: Repositorio Tatu - Testing
+Architectures: i386 amd64 source
+Components: main
+Description: Repositorio Tatu de Testing.
+
+Origin: Proyecto Ceibal
+Suite: devel
+Codename: tatu-devel
+Label: Repositorio Tatu - Desarrollo
+Architectures: i386 amd64 source
+Components: main
+Description: Repositorio Tatu de Desarrollo.

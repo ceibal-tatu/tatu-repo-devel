@@ -2,3 +2,5 @@ examples/taturepo
 examples/pbuilderrc
 examples/devscripts
 examples/gbp.conf
+examples/reprepro.distributions
+examples/reprepro.options
