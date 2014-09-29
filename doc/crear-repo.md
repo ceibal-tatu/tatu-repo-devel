@@ -53,3 +53,9 @@ Agregar el paquete en 64 bits:
 Importar claves de desarrolladores de paquetes:
 
      gpg --import key.public.gpg
+
+Al usar gnupg2, para evitar errores al pedir el passphrase de la clave, asegurarse de incluir en .profile:
+
+     export GPG_TTY=$(tty)
+
+

@@ -1,5 +1,6 @@
 #!/bin/sh
 
+set -x
 #
 # Releases the package and tags the repository.
 #
@@ -68,7 +69,7 @@ if [ "$(dpkg-parsechangelog --show-field DISTRIBUTION)" = "UNRELEASED" ]; then
 fi
 
 NAME=${PWD##*/}
-VERSION=$(dpkg-parsechangelog --show-field Version)
+VERSION=$(dpkg-parsechangelog --show-field Version|sed -e 's,.:\(.*\)$,\1,')
 
 git add ./debian/changelog
 [ $? -ne 0 ] && exit 1;
