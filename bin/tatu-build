@@ -86,10 +86,8 @@ if [[ $LOCAL -eq 0 ]]; then
 fi
 
 ARCH_INDEP=1
-DPKG_BUILD_OPTS=""
 if grep "^\\s*Architecture:\\s*all\\s*\$" debian/control>/dev/null; then
     ARCH_INDEP=0
-	DPKG_BUILD_OPTS="--binary-arch"
 fi
 
 echo "Construyendo paquete..."
@@ -98,9 +96,10 @@ if git branch|grep "pristine-tar">/dev/null; then
     
     # Build base architecture. 
     # Use --git-ignore-branch since we are in a checked out tag.
-    sudo GIT_PBUILDER_AUTOCONF=no ARCH="${ARCH_LIST[0]}" gbp buildpackage --git-ignore-branch  ${GBP_BUILD_OPTIONS}
+    main_arch=${ARCH_LIST[0]}
+    sudo GIT_PBUILDER_AUTOCONF=no ARCH="${main_arch}" gbp buildpackage --git-ignore-branch -- --configfile "/etc/pbuilderrc.${main_arch}.tatu"
     if [[ $? -ne 0 ]]; then
-        "Fallo la construccion del paquete para la arquitecture '${ARCH_LIST[0]}'.">&2
+        "Fallo la construccion del paquete para la arquitectura '${main_arch}'.">&2
         if [[ $CLEAN -eq 1 ]]; then        
             rm -rf "${SOURCE_DIR}"
         else
@@ -112,7 +111,7 @@ if git branch|grep "pristine-tar">/dev/null; then
     # Build other architectures.
     if [ "${ARCH_INDEP}" -eq 0 ]; then
         for arch in "${ARCH_LIST[@]:1}"; do
-            sudo GIT_PBUILDER_AUTOCONF=no ARCH="${arch}" gbp buildpackage --git-ignore-branch ${GBP_BUILD_OPTIONS}
+            sudo GIT_PBUILDER_AUTOCONF=no ARCH="${arch}" gbp buildpackage --git-ignore-branch -- --binary-arch --configfile "/etc/pbuilderrc.${arch}.tatu"
         done
     fi
 else
@@ -127,12 +126,22 @@ else
     fi
 
     # Build base architecture.
-    sudo ARCH="${ARCH_LIST[0]}" pdebuild ${PDEBUILD_OPTIONS}
+    main_arch=${ARCH_LIST[0]}
+    sudo ARCH="${main_arch}" pdebuild ${PDEBUILD_OPTIONS} --configfile "/etc/pbuilderrc.${main_arch}.tatu"
+    if [[ $? -ne 0 ]]; then
+        "Fallo la construccion del paquete para la arquitectura '${main_arch}'.">&2
+        if [[ $CLEAN -eq 1 ]]; then        
+            rm -rf "${SOURCE_DIR}"
+        else
+            echo "Fuentes en '${SOURCE_DIR}'.">&2
+        fi
+        exit 1
+    fi
 
     # Build other architectures.
     if [ "${ARCH_INDEP}" -eq 0 ]; then
         for arch in "${ARCH_LIST[@]:1}"; do
-            sudo ARCH="${arch}" pdebuild ${PDEBUILD_OPTIONS} -- ${DPKG_BUILD_OPTS}
+            sudo pdebuild ${PDEBUILD_OPTIONS} --configfile "/etc/pbuilderrc.${arch}.tatu" -- --binary-arch
         done
     fi
 fi
