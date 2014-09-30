@@ -1,3 +1,9 @@
+tatu-repo-devel (0.20) tatu; urgency=medium
+
+  * Added nginx conf files & script tweaks. 
+
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Mon, 29 Sep 2014 21:32:37 -0300
+
 tatu-repo-devel (0.19) tatu; urgency=medium
 
   * Remove epoch on tag on tatu-release. 
