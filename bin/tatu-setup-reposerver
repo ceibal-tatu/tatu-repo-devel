@@ -94,3 +94,24 @@ sed -i -e "s,//KEY_ID//,${KEY_ID}," "${REPO_BASEDIR}/conf/distributions"
 cp "${EXAMPLES}/reprepro.options" "${REPO_BASEDIR}/conf/options"
 
 chown -R "${REPO_USER}" "${REPO_WEBROOT}"
+
+if [[ -d "/etc/nginx/sites-available/" ]]; then
+    echo "Configurando nginx."
+    echo -n "Hostname del servidor HTTP [localhost]: "
+    read REPO_HOST
+    if [[ ${REPO_HOST} == "" ]]; then
+        REPO_HOST=localhost
+    fi
+
+    # Configuracion del servidor HTTP para el repo.
+    cp "${EXAMPLES}/nginx_taturepo.conf" "/etc/nginx/sites-available/taturepo.conf"
+    sed -i -e "s,//HOSTNAME//,${REPO_HOST}," "/etc/nginx/sites-available/taturepo.conf"
+    ln -s "/etc/nginx/sites-available/taturepo.conf" "/etc/nginx/sites-enabled/"
+    echo
+
+    BUCKET_CONF="/etc/nginx/conf.d/server_names_hash_bucket_size.conf"    
+    if [[ ! -f "${BUCKET_CONF}" ]]; then
+        echo "Configurando ${BUCKET_CONF}."
+        echo "server_names_hash_bucket_size 64;" > "${BUCKET_CONF}"
+    fi
+fi

@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -x
-
 unset CDPATH
 
 GIT_SERVER=github.com
@@ -89,21 +87,22 @@ fi
 
 ARCH_INDEP=1
 DPKG_BUILD_OPTS=""
-if [ "$(grep "^\\s*Architecture:\\s*all\\s*\$" debian/control)" == "" ]; then
+if grep "^\\s*Architecture:\\s*all\\s*\$" debian/control>/dev/null; then
     ARCH_INDEP=0
 	DPKG_BUILD_OPTS="--binary-arch"
 fi
 
 echo "Construyendo paquete..."
-if git branch|grep "pristine-tar"; then
+if git branch|grep "pristine-tar">/dev/null; then
     # Git-buildpackage like structure, use git-buildpackage instead of pdebuild
     
-    # Build base architecture.
-    sudo GIT_PBUILDER_AUTOCONF=no ARCH="${ARCH_LIST[0]}" gbp buildpackage ${GBP_BUILD_OPTIONS}
+    # Build base architecture. 
+    # Use --git-ignore-branch since we are in a checked out tag.
+    sudo GIT_PBUILDER_AUTOCONF=no ARCH="${ARCH_LIST[0]}" gbp buildpackage --git-ignore-branch  ${GBP_BUILD_OPTIONS}
     if [[ $? -ne 0 ]]; then
         "Fallo la construccion del paquete para la arquitecture '${ARCH_LIST[0]}'.">&2
         if [[ $CLEAN -eq 1 ]]; then        
-            sudo rm -rf "${SOURCE_DIR}"
+            rm -rf "${SOURCE_DIR}"
         else
             echo "Fuentes en '${SOURCE_DIR}'.">&2
         fi
@@ -113,7 +112,7 @@ if git branch|grep "pristine-tar"; then
     # Build other architectures.
     if [ "${ARCH_INDEP}" -eq 0 ]; then
         for arch in "${ARCH_LIST[@]:1}"; do
-            sudo GIT_PBUILDER_AUTOCONF=no ARCH="${arch}" gbp buildpackage ${GBP_BUILD_OPTIONS}
+            sudo GIT_PBUILDER_AUTOCONF=no ARCH="${arch}" gbp buildpackage --git-ignore-branch ${GBP_BUILD_OPTIONS}
         done
     fi
 else
@@ -139,4 +138,4 @@ else
 fi
 
 # Delete source folder.
-sudo rm -rf "${SOURCE_DIR}"
+rm -rf "${SOURCE_DIR}"
