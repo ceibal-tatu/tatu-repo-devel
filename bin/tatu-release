@@ -1,6 +1,5 @@
 #!/bin/sh
 
-set -x
 #
 # Releases the package and tags the repository.
 #
