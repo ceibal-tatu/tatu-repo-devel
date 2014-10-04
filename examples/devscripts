@@ -1,7 +1,4 @@
 # Opciones por defecto para devscripts
-# Agregar a ~/.profile ademas.
-DEBEMAIL="ceibal@plan.ceibal.edu.uy"
-DEBFULLNAME="Plan Ceibal"
 
 # Forzar lintian a reconocer tatu como un profile valido, evitando errores de lintian.
 LINTIAN_PROFILE="tatu"
