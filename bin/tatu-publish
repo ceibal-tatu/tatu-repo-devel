@@ -79,6 +79,6 @@ EOF
 
     [ $? -ne 0 ] && echo 'Copy to server staging area failed.' >&2 && exit 1;
     for arch in "${ARCH_LIST[@]}"; do
-	    ssh ${REPO_USER}@${REPO_SERVER} "reprepro --basedir ${REPO_BASEDIR} include ${REPO_CODENAME} staging-${arch}/${NAME}_${VERSION}_${arch}.changes"
+	    ssh ${REPO_USER}@${REPO_SERVER} "reprepro --basedir ${REPO_BASEDIR} include ${REPO_CODENAME} staging-${arch}/${NAME}_${VERSION}_*.changes"
     done
 fi
