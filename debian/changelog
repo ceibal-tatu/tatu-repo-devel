@@ -1,3 +1,10 @@
+tatu-repo-devel (0.22) tatu; urgency=medium
+
+  * Fixed install of arch independent packages.
+  * Install env config defaults on profile.d.
+
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Sat, 04 Oct 2014 10:17:27 -0300
+
 tatu-repo-devel (0.21) tatu; urgency=medium
 
   * Added -b option to tatu-publish and multiple fixes. 
