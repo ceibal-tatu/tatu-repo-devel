@@ -51,7 +51,7 @@ fi
 
 if [ "${INCREMENT}" -eq 0 ]; then
 	if [ "$(dpkg-parsechangelog --show-field Distribution)" != "UNRELEASED" -a "$FORCE" -ne 1 ]; then
-		echo "Error: El paquete no esta marcado como UNRELEASED.\nEjecute 'dch -i' para incrementar la version antes de hacer un release." >&2 && exit 1;
+		echo "Error: El paquete no esta marcado como UNRELEASED.\nPase la opción '-i' o ejecute 'dch -i' para incrementar la version antes de hacer un release." >&2 && exit 1;
 	fi
 else
 	dch -i ${DCH_OPTIONS}
