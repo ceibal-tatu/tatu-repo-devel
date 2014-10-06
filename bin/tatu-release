@@ -68,7 +68,7 @@ if [ "$(dpkg-parsechangelog --show-field DISTRIBUTION)" = "UNRELEASED" ]; then
 fi
 
 NAME=${PWD##*/}
-VERSION=$(dpkg-parsechangelog --show-field Version|sed -e 's,.:\(.*\)$,\1,')
+VERSION=$(dpkg-parsechangelog --show-field Version|tr ':' '_')
 
 git add ./debian/changelog
 [ $? -ne 0 ] && exit 1;
