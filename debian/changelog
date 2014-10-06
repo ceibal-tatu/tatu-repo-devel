@@ -1,3 +1,9 @@
+tatu-repo-devel (0.25) tatu; urgency=medium
+
+  * Improved epoch version handling. 
+
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Sun, 05 Oct 2014 23:29:39 -0200
+
 tatu-repo-devel (0.24) tatu; urgency=medium
 
   * Fixes to tatu-build & updated dependencies. 
