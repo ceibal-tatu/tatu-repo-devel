@@ -2,7 +2,7 @@ tatu-repo-devel (0.24) tatu; urgency=medium
 
   * Fixes to tatu-build & updated dependencies. 
 
- -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Sun, 05 Oct 2014 23:17:03 -0200
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Sun, 05 Oct 2014 23:17:23 -0200
 
 tatu-repo-devel (0.23) tatu; urgency=medium
 
