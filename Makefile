@@ -6,7 +6,9 @@ VENDOR_DATA_DIR=$(LINTIAN_DIR)/vendors/$(VENDOR)/main/data
 all:
 
 install: all
-	install -d $(DESTDIR)/var/log/tatu-repo-devel/
+	install -o root -g root -m 755 -d $(DESTDIR)/var/log/tatu-repo-devel/
+	install -o syslog -g adm -m 755 -d $(DESTDIR)/var/log/tatu-repo/
+	install -o www-data -g adm -m 750 -d $(DESTIDR)/var/log/tatu-repo/nginx/
 	install -d $(DESTDIR)/etc/
 	install -o root -g root -m 644 etc/*.conf $(DESTDIR)/etc/
 	install -o root -g root -m 644 etc/pbuilder* $(DESTDIR)/etc/
