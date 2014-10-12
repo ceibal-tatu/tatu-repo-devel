@@ -97,15 +97,15 @@ chown -R "${REPO_USER}" "${REPO_WEBROOT}"
 
 if [[ -d "/etc/nginx/sites-available/" ]]; then
     echo "Configurando nginx."
-    echo -n "Hostname del servidor HTTP [localhost]: "
+    echo -n "Hostname del servidor HTTP [${REPO_SERVER}]: "
     read REPO_HOST
     if [[ ${REPO_HOST} == "" ]]; then
-        REPO_HOST=localhost
+        REPO_HOST=${REPO_SERVER}
     fi
 
     # Configuracion del servidor HTTP para el repo.
     cp "${EXAMPLES}/nginx_taturepo.conf" "/etc/nginx/sites-available/taturepo.conf"
-    sed -i -e "s,//HOSTNAME//,${REPO_HOST}," "/etc/nginx/sites-available/taturepo.conf"
+    sed -i -e "s,//REPO_SERVER//,${REPO_HOST}," "/etc/nginx/sites-available/taturepo.conf"
     ln -s "/etc/nginx/sites-available/taturepo.conf" "/etc/nginx/sites-enabled/"
     echo
 
@@ -115,3 +115,10 @@ if [[ -d "/etc/nginx/sites-available/" ]]; then
         echo "server_names_hash_bucket_size 64;" > "${BUCKET_CONF}"
     fi
 fi
+
+echo "Configurando awstats."
+mkdir -p "/var/lib/awstats/${REPO_HOST}/"
+chown -R www-data:adm "/var/lib/awstats/${REPO_HOST}/"
+mkdir -p "${REPO_BASEDIR}/stats"
+cp "${EXAMPLES}/awstats.taturepo1.ddns.net.conf" "/etc/awstats/awstats.${REPO_HOST}.conf"
+sed -i -e "s,//REPO_SERVER//,${REPO_HOST}," "/etc/awstats/awstats.${REPO_HOST}.conf"
