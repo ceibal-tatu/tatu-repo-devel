@@ -1,0 +1,19 @@
+#!/bin/bash
+
+mkdir -p /var/log/tatu-repo/nginx
+chown root:syslog /var/log/tatu-repo/
+chown www-data:adm /var/log/tatu-repo/nginx/
+
+mkdir -p /var/lib/awstats/taturepo.ddns.net/
+chown www-data:adm /var/lib/awstats/taturepo.ddns.net/
+
+cat <<EOF > 
+# /etc/cron.d/tatu-mirror-rsync: mirrors the tatu master repository.
+
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+30 * * * *   root /usr/sbin/tatu-rsync-mirror
+EOF
+
+tatu-rsync-mirror

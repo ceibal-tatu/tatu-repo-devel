@@ -1,0 +1,19 @@
+#!/bin/bash
+set -x
+USER=rsync
+HOST=tatumaster.ddns.net
+SSH_HOST="${USER}@${HOST}"
+SSH_PORT=3022
+SSH_COMMAND="ssh -i /root/.ssh/rsync_dsa -p ${SSH_PORT}"
+
+# Initialize known_hosts the first time if necessary.
+if ! grep ${HOST} /root/.ssh/known_hosts > /dev/null 2>&1; then
+	ssh-keyscan -p ${SSH_PORT} -t ecdsa ${HOST} >> /root/.ssh/known_hosts 2>/dev/null
+fi
+
+DIRS="/srv/reprepro/ /etc/nginx/ /etc/awstats/"
+for x in ${DIRS}; do
+	rsync -avz --delete-after -e "${SSH_COMMAND}" ${SSH_HOST}:${x} ${x}
+done
+
+service nginx reload

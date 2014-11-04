@@ -1,0 +1,8 @@
+#!/bin/sh
+
+cat <<EOF > /etc/apt/sources.list.d/tatu.list
+deb http://taturepo.ddns.net/ubuntu/ tatu main
+deb-src http://taturepo.ddns.net/ubuntu/ tatu main
+EOF
+
+wget http://taturepo.ddns.net/tatu.gpg.key -O - |apt-key add -
