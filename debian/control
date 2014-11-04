@@ -2,14 +2,14 @@ Source: tatu-repo-devel
 Section: devel
 Priority: optional
 Maintainer: Plan Ceibal <ceibal@plan.ceibal.edu.uy>
-Build-Depends: debhelper (>= 9.0.0)
+Build-Depends: debhelper (>= 9.0.0), rsyslog
 Standards-Version: 3.9.5
 Vcs-Git: git://github.com/ceibal-tatu/tatu-repo-devel.git
 Vcs-Browser: https://github.com/ceibal-tatu/tatu-repo-devel/
 
 Package: tatu-repo-devel
 Architecture: all
-Depends: ${misc:Depends}, wget, apt, parallel, pbuilder, devscripts, build-essential, debhelper, dpkg-dev, git, quilt, gnupg2, nginx, cdbs, awstats, fcgiwrap, openssh-client, openssh-server
+Depends: ${misc:Depends}, wget, apt, parallel, pbuilder, devscripts, build-essential, debhelper, dpkg-dev, git, quilt, gnupg2, nginx, cdbs, awstats, fcgiwrap, openssh-client, openssh-server, rsyslog
 Description: Herramientas para Repositorio 
  Provee scripts y archivos de configuracion para construir paquetes para el 
  repositorio Tatu.
