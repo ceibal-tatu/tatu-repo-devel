@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Configures a new repository server from scratch.
+# To create mirrors of an existing repository service, use tatu-setup-mirror instead.
+
 unset CDPATH
 
 BUILD_USER=builder

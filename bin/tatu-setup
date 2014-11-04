@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Configures a build & development environment for tatu repository.
+
 if [ "$UID" -ne 0 ]; then
     echo "El script debe ser ejecutado como root." >&2
     exit 1;
