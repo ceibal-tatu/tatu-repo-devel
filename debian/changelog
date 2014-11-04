@@ -1,3 +1,11 @@
+tatu-repo-devel (0.26) tatu; urgency=medium
+
+  * Added mirror setup scripts.
+  * Use DNS aliases instead of taturepo1.
+  * Fixed gnupg ask passphrase issue when publishing. 
+
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Tue, 04 Nov 2014 14:21:48 -0200
+
 tatu-repo-devel (0.25) tatu; urgency=medium
 
   * Improved epoch version handling. 
