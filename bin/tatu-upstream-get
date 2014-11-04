@@ -5,7 +5,7 @@
 # 
 
 BUILD_USER=devel
-BUILD_SERVER=taturepo1.ddns.net
+BUILD_SERVER=tatubuild.ddns.net
 BUILD_UPSTREAM_WWW=http://${BUILD_SERVER}/upstream/
 
 unset CDPATH

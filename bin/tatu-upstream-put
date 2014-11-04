@@ -5,8 +5,9 @@
 # 
 
 BUILD_USER=devel
-BUILD_SERVER=taturepo1.ddns.net
+BUILD_SERVER=tatumaster.ddns.net
 BUILD_UPSTREAM=/srv/reprepro/upstream/
+SSH_PORT=3022
 
 if [ -f /etc/taturepo.conf ]; then
     . /etc/taturepo.conf
@@ -48,4 +49,4 @@ if [ "$?" -ne 0 ]; then
     exit 1
 fi
 
-scp "${UPSTREAM_SRC}" "${BUILD_HOST}:${BUILD_UPSTREAM}/${UPSTREAM_SRC}"
+scp -P ${SSH_PORT} "${UPSTREAM_SRC}" "${BUILD_HOST}:${BUILD_UPSTREAM}/${UPSTREAM_SRC}"

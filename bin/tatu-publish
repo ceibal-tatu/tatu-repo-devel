@@ -7,10 +7,11 @@ REPO_SERVER=tatu
 REPO_USER=root
 REPO_BASEDIR=/srv/reprepro/ubuntu/
 BUILD_USER=devel
-BUILD_SERVER=taturepo1.ddns.net
+BUILD_SERVER=tatubuild.ddns.net
 BUILD_BASEDIR=/var/cache/pbuilder/
 BUILD_CODENAME=precise
 BUILD_UPSTREAM_WWW=http://${BUILD_SERVER}/upstream/
+SSH_PORT=3022
 ARCH="i386 amd64"
 VERSION=
 NAME=
@@ -59,19 +60,19 @@ if [ "${#ARCH_LIST[@]}" -lt 1 ]; then
     exit 1
 fi
 
-ssh -A ${BUILD_USER}@${BUILD_SERVER} "tatu-build -n ${NAME} -v ${VERSION}"
+ssh -p ${SSH_PORT} -A ${BUILD_USER}@${BUILD_SERVER} "tatu-build -n ${NAME} -v ${VERSION}"
 [ $? -ne 0 ] && echo 'Git build failed.' >&2 && exit 1;
 
 # Copy built files to repository server for publishing.
 for arch in "${ARCH_LIST[@]}"; do
-	scp ${BUILD_USER}@${BUILD_SERVER}:${BUILD_BASEDIR}/${BUILD_CODENAME}-${arch}/result/${NAME}_${VERSION}[_.]* ${REPO_USER}@${REPO_SERVER}:staging-${arch}/
+	scp -P ${SSH_PORT} ${BUILD_USER}@${BUILD_SERVER}:${BUILD_BASEDIR}/${BUILD_CODENAME}-${arch}/result/${NAME}_${VERSION}[_.]* ${REPO_USER}@${REPO_SERVER}:staging-${arch}/
 done
 
 if [[ ${ONLY_BUILD} -eq 0 ]]; then
 
     # Copy tatu-repo & tatu-repo-update to HTTP server root folder, and link current published version.
     if [ "${NAME}" = "tatu-repo" -o "${NAME}" = "tatu-repo-update" ]; then
-	    ssh ${REPO_USER}@${REPO_SERVER} 'bash -sh'<<EOF
+	    ssh -p ${SSH_PORT} ${REPO_USER}@${REPO_SERVER} 'bash -sh'<<EOF
 cp staging-${ARCH_LIST[0]}/${NAME}_${VERSION}_all.deb ${REPO_WEBROOT};
 ln -f -s ${REPO_WEBROOT}/${NAME}_${VERSION}_all.deb ${REPO_WEBROOT}/${NAME}.deb
 EOF
@@ -79,6 +80,6 @@ EOF
 
     [ $? -ne 0 ] && echo 'Copy to server staging area failed.' >&2 && exit 1;
     for arch in "${ARCH_LIST[@]}"; do
-	    ssh ${REPO_USER}@${REPO_SERVER} "reprepro --basedir ${REPO_BASEDIR} include ${REPO_CODENAME} staging-${arch}/${NAME}_${VERSION}_*.changes"
+	    ssh -p ${SSH_PORT} ${REPO_USER}@${REPO_SERVER} "reprepro --basedir ${REPO_BASEDIR} include ${REPO_CODENAME} staging-${arch}/${NAME}_${VERSION}_*.changes"
     done
 fi
