@@ -1,3 +1,9 @@
+tatu-repo-devel (0.27) tatu; urgency=medium
+
+  * Fixed dependencies for syslog user. 
+
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Tue, 04 Nov 2014 14:43:20 -0200
+
 tatu-repo-devel (0.26) tatu; urgency=medium
 
   * Added mirror setup scripts.
