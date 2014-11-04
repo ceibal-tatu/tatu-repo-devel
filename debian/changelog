@@ -1,3 +1,9 @@
+tatu-repo-devel (0.28) tatu; urgency=medium
+
+  * Fixed tatu-rsync-mirror script. 
+
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Tue, 04 Nov 2014 15:17:08 -0200
+
 tatu-repo-devel (0.27) tatu; urgency=medium
 
   * Fixed dependencies for syslog user. 
