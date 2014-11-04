@@ -1,14 +1,27 @@
 #!/bin/bash
-set -x
-USER=rsync
-HOST=tatumaster.ddns.net
-SSH_HOST="${USER}@${HOST}"
-SSH_PORT=3022
-SSH_COMMAND="ssh -i /root/.ssh/rsync_dsa -p ${SSH_PORT}"
+
+# Mirrors the content of the repository master.
+
+MASTER_REPO_RSYNC=rsync
+MASTER_REPO_SERVER=tatumaster.ddns.net
+MASTER_REPO_PORT=3022
+RSYNC_SSH_KEY=/root/.ssh/rsync_dsa
+
+if [ -f /etc/taturepo.conf ]; then
+    . /etc/taturepo.conf
+fi
+
+if [ -f ~/.taturepo ]; then
+    . ~/.taturepo
+fi
+
+SSH_HOST="${MASTER_REPO_RSYNC}@${MASTER_REPO_SERVER}"
+SSH_PORT=${MASTER_REPO_PORT}
+SSH_COMMAND="ssh -i ${RSYNC_SSH_KEY} -p ${SSH_PORT}"
 
 # Initialize known_hosts the first time if necessary.
-if ! grep ${HOST} /root/.ssh/known_hosts > /dev/null 2>&1; then
-	ssh-keyscan -p ${SSH_PORT} -t ecdsa ${HOST} >> /root/.ssh/known_hosts 2>/dev/null
+if ! grep ${MASTER_REPO_SERVER} /root/.ssh/known_hosts > /dev/null 2>&1; then
+	ssh-keyscan -p ${SSH_PORT} -t ecdsa ${MASTER_REPO_SERVER} >> /root/.ssh/known_hosts 2>/dev/null
 fi
 
 DIRS="/srv/reprepro/ /etc/nginx/ /etc/awstats/"
