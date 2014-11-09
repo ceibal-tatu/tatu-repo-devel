@@ -13,7 +13,7 @@ cat <<EOF > /etc/cron.d/tatu-rsync-mirror
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
-30 * * * *   root /usr/sbin/tatu-rsync-mirror
+*/30 * * * *   root /usr/bin/tatu-rsync-mirror
 EOF
 
 tatu-rsync-mirror
