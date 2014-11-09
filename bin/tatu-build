@@ -85,9 +85,9 @@ if [[ $LOCAL -eq 0 ]]; then
     fi
 fi
 
-ARCH_INDEP=1
+ARCH_INDEP=0
 if grep "^\\s*Architecture:\\s*all\\s*\$" debian/control>/dev/null; then
-    ARCH_INDEP=0
+    ARCH_INDEP=1
 fi
 
 echo "Construyendo paquete..."
