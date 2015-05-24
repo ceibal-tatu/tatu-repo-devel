@@ -1,3 +1,9 @@
+tatu-repo-devel (0.31) tatu; urgency=medium
+
+  * Fixed Makefile install. 
+
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Sun, 24 May 2015 19:30:07 -0300
+
 tatu-repo-devel (0.30) tatu; urgency=medium
 
   * Added tatu repo for builds. 
