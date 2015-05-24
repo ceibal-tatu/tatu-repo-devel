@@ -14,9 +14,13 @@ install: all
 	install -o root -g root -m 644 etc/pbuilder* $(DESTDIR)/etc/
 	install -d $(DESTDIR)/etc/profile.d/
 	install -o root -g root -m 644 etc/profile.d/* $(DESTDIR)/etc/profile.d/
+	install -d $(DESTDIR)/etc/pbuilder/hooks/
+	install -o root -g root -m 755 etc/pbuilder/hooks/* $(DESTDIR)/etc/pbuilder/hooks/
 	install -d $(DESTDIR)/usr/bin/
 	install -o root -g root -m 755 bin/* $(DESTDIR)/usr/bin/
 	install -d $(PROFILE_DIR)
 	install -o root -g root -m 644 main.profile $(PROFILE_DIR)/main.profile
 	install -d $(VENDOR_DATA_DIR)/changes-file/
 	install -o root -g root -m 644 known-dists $(VENDOR_DATA_DIR)/changes-file/known-dists
+	install -d $(DESTDIR)/usr/share/keyrings/
+	install -o root -g root -m 644 tatu-repo-keyring.gpg $(DESTDIR)/usr/share/keyrings/

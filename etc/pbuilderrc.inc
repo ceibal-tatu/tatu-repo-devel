@@ -2,10 +2,16 @@
 # Taken from https://wiki.ubuntu.com/PbuilderHowto#Multiple_pbuilders 
 # Only considering Ubuntu builds.
 
+HOOKDIR="/etc/pbuilder/hooks/"
+
 # List of Ubuntu suites. Update these when needed.
 UBUNTU_SUITES=("saucy" "raring" "precise")
 # Update to preferred mirror.
 UBUNTU_MIRROR="uy.archive.ubuntu.com"
+
+OTHERMIRROR="deb http://taturepo1.ddns.net/ubuntu/ tatu main"
+ALLOWUNTRUSTED=yes
+APTKEYRINGS=("/usr/share/keyrings/ubuntu-archive-keyring.gpg" "/usr/share/keyrings/tatu-repo-keyring.gpg")
 
 # Set the architecture to the host architecture if none set.
 #: ${ARCH:="$(dpkg --print-architecture)"}
@@ -18,7 +24,7 @@ UBUNTU_MIRROR="uy.archive.ubuntu.com"
 NAME="$DIST"
 if [ -n "${ARCH}" ]; then
     NAME="$NAME-$ARCH"
-    DEBOOTSTRAPOPTS=("--arch" "$ARCH" "${DEBOOTSTRAPOPTS[@]}")
+    DEBOOTSTRAPOPTS=("--arch" "${ARCH}" "${DEBOOTSTRAPOPTS[@]}")
 fi
 BASETGZ="/var/cache/pbuilder/$NAME-base.tgz"
 # Optionally, set BASEPATH (and not BASETGZ) if using cowbuilder
@@ -31,7 +37,7 @@ BUILDPLACE="/var/cache/pbuilder/build/"
 # Ubuntu configuration
 MIRRORSITE="http://$UBUNTU_MIRROR/ubuntu/"
 COMPONENTS="main restricted universe multiverse"
-DEBOOTSTRAPOPTS=("${DEBOOTSTRAPOPTS[@]}" "--keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg")
+DEBOOTSTRAPOPTS=("${DEBOOTSTRAPOPTS[@]}" "--keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg" "--keyring=/usr/share/keyrings/tatu-repo-keyring.gpg")
 
 CCACHEDIR=/var/cache/pbuilder/ccache
 

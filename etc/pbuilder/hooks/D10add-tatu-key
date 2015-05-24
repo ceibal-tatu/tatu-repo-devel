@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "deb http://taturepo.ddns.net/ubuntu/ tatu main" > /etc/apt/sources.list.d/tatu-apt.list
+apt-get update
