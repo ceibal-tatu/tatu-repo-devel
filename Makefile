@@ -11,7 +11,7 @@ install: all
 	install -o www-data -g adm -m 750 -d $(DESTDIR)/var/log/tatu-repo/nginx/
 	install -d $(DESTDIR)/etc/
 	install -o root -g root -m 644 etc/*.conf $(DESTDIR)/etc/
-	install -o root -g root -m 644 etc/pbuilder* $(DESTDIR)/etc/
+	install -o root -g root -m 644 etc/pbuilder*.* $(DESTDIR)/etc/
 	install -d $(DESTDIR)/etc/profile.d/
 	install -o root -g root -m 644 etc/profile.d/* $(DESTDIR)/etc/profile.d/
 	install -d $(DESTDIR)/etc/pbuilder/hooks/
