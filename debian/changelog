@@ -1,8 +1,8 @@
-tatu-repo-devel (0.32) UNRELEASED; urgency=medium
+tatu-repo-devel (0.32) tatu; urgency=medium
 
   * Fixed tatu-build var reference. 
 
- -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Sun, 24 May 2015 21:45:00 -0300
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Sun, 24 May 2015 21:45:43 -0300
 
 tatu-repo-devel (0.31) tatu; urgency=medium
 
