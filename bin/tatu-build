@@ -55,6 +55,8 @@ USAGE
     exit 1
 fi
 
+VERSION=$(echo $VERSION|tr ':' '_'|tr '~' '_')
+
 ARCH_LIST=(${ARCH})
 
 if [ "${#ARCH_LIST[@]}" -lt 1 ]; then
