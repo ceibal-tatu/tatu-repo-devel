@@ -1,3 +1,9 @@
+tatu-repo-devel (0.33) tatu; urgency=medium
+
+  * Transliterate ~ on version numbers. 
+
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Mon, 25 May 2015 23:55:57 -0300
+
 tatu-repo-devel (0.32) tatu; urgency=medium
 
   * Fixed tatu-build var reference. 
