@@ -1,3 +1,9 @@
+tatu-repo-devel (0.34) tatu; urgency=medium
+
+  * Pass pristine-tar on gbp buildpackage. 
+
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Sun, 31 May 2015 20:42:24 -0300
+
 tatu-repo-devel (0.33) tatu; urgency=medium
 
   * Transliterate ~ on version numbers. 
