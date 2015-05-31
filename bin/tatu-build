@@ -99,7 +99,7 @@ if git branch|grep "pristine-tar">/dev/null; then
     # Build base architecture. 
     # Use --git-ignore-branch since we are in a checked out tag.
     main_arch=${ARCH_LIST[0]}
-    sudo GIT_PBUILDER_AUTOCONF=no ARCH="${main_arch}" gbp buildpackage --git-ignore-branch --git-dist="${BUILD_CODENAME}" --git-pbuilder --git-pbuilder-options="--configfile /etc/pbuilderrc.${main_arch}.tatu"
+    sudo GIT_PBUILDER_AUTOCONF=no ARCH="${main_arch}" gbp buildpackage --git-ignore-branch --git-pristine-tar --git-dist="${BUILD_CODENAME}" --git-pbuilder --git-pbuilder-options="--configfile /etc/pbuilderrc.${main_arch}.tatu"
     if [[ $? -ne 0 ]]; then
         "Fallo la construccion del paquete para la arquitectura '${main_arch}'.">&2
         if [[ $CLEAN -eq 1 ]]; then        
@@ -113,7 +113,7 @@ if git branch|grep "pristine-tar">/dev/null; then
     # Build other architectures.
     if [ "${ARCH_INDEP}" -eq 0 ]; then
         for arch in "${ARCH_LIST[@]:1}"; do
-            sudo GIT_PBUILDER_AUTOCONF=no ARCH="${arch}" gbp buildpackage --git-dist="{BUILD_CODENAME}" --git-ignore-branch --git-pbuilder --git-pbuilder-options="--binary-arch --configfile /etc/pbuilderrc.${arch}.tatu"
+            sudo GIT_PBUILDER_AUTOCONF=no ARCH="${arch}" gbp buildpackage --git-dist="{BUILD_CODENAME}" --git-ignore-branch --git-pristine-tar --git-pbuilder --git-pbuilder-options="--binary-arch --configfile /etc/pbuilderrc.${arch}.tatu"
         done
     fi
 else
