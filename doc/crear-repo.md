@@ -1,61 +1,69 @@
-Generar clave GPG:
+# Creacion y configuracion del repositorio de paquetes
 
-    gpg --gen-key
-    gpg --armor --export tatu@plan.ceibal.edu.uy --output tatu.gpg.key > tatu.gpg.key
+Este documento describe el proceso que se siguió para generar el repositorio tatu. En caso de que sea necesario crear el repositorio desde cero, es posible usar este proceso para replicarlo, pero para agregar nuevos mirrors del repositorio o equipos de build se recomienda usar las imagenes Docker directamente.
 
-Crear estructura de directorios:
+## Configurar el repositorio
 
-    mkdir -p /srv/reprepro/ubuntu/{conf,dists,incoming,indices,logs,pool,project,tmpl}
-    # chown /srv/reprepro to appropiate user (ie. nginx user, or user with persmissions to publish packages)
-    cd /srv/reprepro/ubuntu
+El proceso asume que el paquete tatu-repo-devel esta instalado o accesible, ya que hace referencia a archivos de ejemplo incluidos en este paquete.
 
-Editar `conf/distributions`, configurar el ID de la clave GPG.
-Editar `conf/options`
+1. Crear estructura de directorios para el repositorio:
 
-Agregar paquetes al repositorio:
+    $ sudo mkdir -p /srv/reprepro/ubuntu/{conf,dists,incoming,indices,logs,pool,project,tmpl}
+    $ cd /srv/reprepro/ubuntu
 
-    reprepro --basedir /srv/reprepro/ubuntu/ include tatu /home/saguiar/dev/hello/tatu_0.1_amd64.changes
+*Copiar los archivos de configuracion* de ejemplo incluidos en tatu-repo-devel a `/src/reprepro/ubuntu/conf/`:
 
-Donde `.changes` es creada via `debuild`.
+    $ cp /usr/share/doc/tatu-repo-devel/examples/reprepro.distributions /srv/reprepro/ubuntu/conf/distributions
+    $ cp /usr/share/doc/tatu-repo-devel/examples/reprepro.options /srv/reprepro/ubuntu/conf/options
 
-Instalar pbuilder, usado para construir paquetes para multiples plataformas/distribuciones.
+Editarlos y modificar los campos que se considere necesario (nombre del repositorio, etc.).
 
-    sudo apt-get install pbuilder debootstrap 
+2. Generar la clave GPG que se va a utilizar para firmar los paquetes del repositorio. Esta clave debería ser provista y administrada por Ceibal, y todos los repositorios deberían utilizar la misma.
 
-Crear `~/.pbuilderrc`, como en el archivo de ejemplo.
+En caso de poseer una clave privada provista por ceibal, se debe registrar la misma para `root`.
 
-Crear entornos para `pbuilder`:
+Para *crear una nueva clave* se debe tener `gpg` instalado y ejecutar (como `root`):
 
-    sudo pbuilder create
-    sudo ARCH=amd64 pbuilder create
+    $ gpg --gen-key
 
-Actualizar `pbuilder`; se debe hacer diariamente antes de construir nuevos paquetes:
+Luego seguir las instrucciones. Una vez completado el proceso, la clave sera guardada en el keyring de `root`. La clave puede verse ejecutando: 
 
-    sudo pbuilder update
+    $ gpg --list-keys
+    pub   4096R/BCACEF2D 2014-08-22
+    uid                  Proyecto Ceibal (Repositorio Tatu) <tatu@plan.ceibal.edu.uy>
+    sub   4096R/716EBEE6 2014-08-22
 
-Construir un paquete desde el directorio que contiene el código fuente y el directorio debian/:
+En el caso anterior, la clave esta asociada al email `tatu@plan.ceibal.edu.uy` y tiene como ID `BCACEF2D`.
 
-    pdebuild # for default ARCH, which in .pbuilderrc is i386
-    ARCH=amd4 pdebuild # for amd64 build.
+Para *exportar la clave publica*, ejecutar el siguiente comando usando la direccion de email asociada:
 
-Quitar un paquete:
+    $ gpg --armor --export tatu@plan.ceibal.edu.uy --output tatu.gpg.key > /srv/reprepro/tatu.gpg.key
 
-    reprepro --basedir /srv/reprepro/ubuntu/ remove tatu tatu
+La clave exportada es la que deben importar los equipos para poder usar el repositorio.
 
-Agregar el paquete:
+Editar `/srv/reprepro/ubuntu/conf/distributions`, *configurar el ID de la clave GPG* usada para firmar los paquetes (en el ejemplo `BCACEF2D`) en el campo `SignWith`.
 
-    reprepro --basedir /srv/reprepro/ubuntu/ include tatu /var/cache/pbuilder/precise-i386/result/tatu_0.1_i386.changes
+## Operaciones sobre paquetes
 
-Agregar el paquete en 64 bits:
+Una vez que se disponga de paquetes creados correctamente, se pueden *agregar paquetes al repositorio*:
 
-    reprepro --basedir /srv/reprepro/ubuntu/ include tatu /var/cache/pbuilder/precise-amd64/result/tatu_0.1_amd64.changes
+    $ reprepro --basedir /srv/reprepro/ubuntu/ include tatu /home/saguiar/dev/hello/hello_world_0.1_amd64.changes
 
-Importar claves de desarrolladores de paquetes:
+Donde `.changes` es creada via `debuild` o un comando similar, como se explica en [crear-paquetes.md]. `tatu` es el `Codename` del repositorio, tal como se configura en `/srv/reprepro/ubuntu/conf/distributions`.
 
-     gpg --import key.public.gpg
+Para agregar paquetes firmados por un desarrollador, es necesario *importar la clave publica del desarrollador* (generada al igual que la clave GPG para el repositorio):
 
-Al usar gnupg2, para evitar errores al pedir el passphrase de la clave, asegurarse de incluir en .profile:
+     gpg --import developer1.public.gpg
+
+Tambien se puede *eliminar un paquete*:
+
+    reprepro --basedir /srv/reprepro/ubuntu/ remove tatu hello_world
+
+Los paquetes pueden copiarse al repositorio manualmente, o utilizar los scripts de tatu-repo-devel para publicarlos y construirlos automaticamente a partir de un repositorio, como se explica en [crear-paquetes.md].
+
+## Configuraciones adicionales
+
+Si se quiere conectarse al servidor del repositorio por SSH e importar paquetes y el servidor tiene instalado `gnupg2`, incluir en el archivo `~/.profile` del usuario que se este conectando la siguiente linea, para evitar errores al pedir el passphrase de la clave:
 
      export GPG_TTY=$(tty)
-
 
