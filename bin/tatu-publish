@@ -64,8 +64,17 @@ ssh -t -p ${SSH_PORT} -A ${BUILD_USER}@${BUILD_SERVER} "tatu-build -n ${NAME} -v
 [ $? -ne 0 ] && echo 'Git build failed.' >&2 && exit 1;
 
 # Copy built files to repository server for publishing.
+TEMP_BUILD_DIR=`mktemp -d`
 for arch in "${ARCH_LIST[@]}"; do
-	scp -P ${SSH_PORT} ${BUILD_USER}@${BUILD_SERVER}:${BUILD_BASEDIR}/${BUILD_CODENAME}-${arch}/result/${NAME}_${VERSION}[_.]* ${REPO_USER}@${REPO_SERVER}:staging-${arch}/
+    mkdir ${TEMP_BUILD_DIR}/${arch}
+	scp -P ${SSH_PORT} ${BUILD_USER}@${BUILD_SERVER}:${BUILD_BASEDIR}/${BUILD_CODENAME}-${arch}/result/${NAME}_${VERSION}[_.]* ${TEMP_BUILD_DIR}/${arch}/ 2>&1
+    if [ $? -ne 0 ]; then 
+        echo "No files for ${arch} architecture."
+        rm -rf ${TEMP_BUILD_DIR}/${arch}
+    else 
+        echo "Copying built files to server staging area."
+        scp -P ${SSH_PORT} ${TEMP_BUILD_DIR}/${arch}/* ${REPO_USER}@${REPO_SERVER}:staging-${arch}/
+    fi
 done
 
 if [[ ${ONLY_BUILD} -eq 0 ]]; then
@@ -80,6 +89,10 @@ EOF
 
     [ $? -ne 0 ] && echo 'Copy to server staging area failed.' >&2 && exit 1;
     for arch in "${ARCH_LIST[@]}"; do
-	    ssh -t -p ${SSH_PORT} ${REPO_USER}@${REPO_SERVER} "reprepro --basedir ${REPO_BASEDIR} include ${REPO_CODENAME} staging-${arch}/${NAME}_${VERSION}_*.changes"
+        if [ -d ${TEMP_BUILD_DIR}/${arch}/ ]; then
+	        ssh -t -p ${SSH_PORT} ${REPO_USER}@${REPO_SERVER} "reprepro --basedir ${REPO_BASEDIR} include ${REPO_CODENAME} staging-${arch}/${NAME}_${VERSION}_*.changes"
+        fi
     done
 fi
+
+rm -rf ${TEMP_BUILD_DIR}
