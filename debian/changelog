@@ -1,3 +1,9 @@
+tatu-repo-devel (0.35) tatu; urgency=medium
+
+  * Work around scp source port limitation. 
+
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Mon, 06 Jul 2015 16:40:06 -0300
+
 tatu-repo-devel (0.34) tatu; urgency=medium
 
   * Pass pristine-tar on gbp buildpackage. 
