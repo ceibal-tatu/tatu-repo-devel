@@ -37,7 +37,7 @@ BUILDPLACE="/var/cache/pbuilder/build/"
 # Ubuntu configuration
 MIRRORSITE="http://$UBUNTU_MIRROR/ubuntu/"
 COMPONENTS="main restricted universe multiverse"
-DEBOOTSTRAPOPTS=("${DEBOOTSTRAPOPTS[@]}" "--keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg" "--keyring=/usr/share/keyrings/tatu-repo-keyring.gpg")
+DEBOOTSTRAPOPTS=("${DEBOOTSTRAPOPTS[@]}" "--keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg")
 
 CCACHEDIR=/var/cache/pbuilder/ccache
 
