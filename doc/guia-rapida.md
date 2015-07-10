@@ -43,26 +43,39 @@ git config --global user.email "gus.duarte@gmail.com"
 
 git clone git@github.com:ceibal-tatu/tatu-hello.git
 
-9) Hacer algun cambio en tatu-hello.c.in
 
-10) Buildear y probar localmente o en una maquina de test.
+9) Configurar el variable de ambiente
+
+En el .bashrc del $HOME, agregar el nombre, email y gpg key id.
+
+por ej:
+
+GPGKEY=A9E6A222
+DEBFULLNAME="Gustavo Duarte"
+DEBEMAIL="gus.duarte@gmail.com"
+export DEBEMAIL
+export DEBFULLNAME
+
+10) Hacer algun cambio en tatu-hello.c.in
+
+11) Buildear y probar localmente o en una maquina de test.
 
 Parado en el directorio tatu-hello
 
 sudo pbuilder create --configfile /etc/pbuilderrc.i386.tatu
 
-11) El paquete generado queda en: /var/cache/pbuilder/precise-i386/result/
+12) El paquete generado queda en: /var/cache/pbuilder/precise-i386/result/
 
-12) Instalarlo y probarlo.
+13) Instalarlo y probarlo.
 dpkg -i tatu-hello_0.14_i386.deb
 
-13) Generar un release.
+14) Generar un release.
 
 Parado en el directorio tatu-hello
 
 tatu-release -i 
 
-14) Publicarlo
+15) Publicarlo
 
 tatu-publish -n tatu-hello -v 0.14
 
