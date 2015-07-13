@@ -62,7 +62,7 @@ export DEBFULLNAME
 
 Parado en el directorio tatu-hello
 
-sudo pbuilder create --configfile /etc/pbuilderrc.i386.tatu
+sudo pdebuild --configfile /etc/pbuilderrc.i386.tatu
 
 12) El paquete generado queda en: /var/cache/pbuilder/precise-i386/result/
 
