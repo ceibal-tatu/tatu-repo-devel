@@ -5,3 +5,4 @@ examples/gbp.conf
 examples/reprepro.distributions
 examples/reprepro.options
 examples/awstats.taturepo.ddns.net.conf
+examples/nginx_taturepo1.conf

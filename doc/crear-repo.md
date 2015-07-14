@@ -1,10 +1,13 @@
 # Creacion y configuracion del repositorio de paquetes
 
+
 Este documento describe el proceso que se siguió para generar el repositorio tatu. En caso de que sea necesario crear el repositorio desde cero, es posible usar este proceso para replicarlo, pero para agregar nuevos mirrors del repositorio o equipos de build se recomienda usar las imagenes Docker directamente.
 
 ## Configurar el repositorio
 
 El proceso asume que el paquete tatu-repo-devel esta instalado o accesible, ya que hace referencia a archivos de ejemplo incluidos en este paquete.
+
+0. Esta disponible el script tatu-setup-reposerver que realiza basicamente este procedmiento.
 
 1. Crear estructura de directorios para el repositorio:
 
