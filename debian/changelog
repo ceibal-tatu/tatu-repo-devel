@@ -2,7 +2,7 @@ tatu-repo-devel (0.38) tatu; urgency=medium
 
   * Pass architecture to tatu-build
 
- -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Tue, 14 Jul 2015 16:13:08 +0000
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Tue, 14 Jul 2015 16:15:36 +0000
 
 tatu-repo-devel (0.37) tatu; urgency=medium
 
