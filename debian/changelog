@@ -1,3 +1,9 @@
+tatu-repo-devel (0.40) tatu; urgency=medium
+
+  * Fix for working with versions with epoch. 
+
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Tue, 14 Jul 2015 19:33:10 +0000
+
 tatu-repo-devel (0.39) tatu; urgency=medium
 
   * Fixed architecture arg for tatu-build. 
