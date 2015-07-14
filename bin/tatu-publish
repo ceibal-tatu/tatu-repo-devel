@@ -60,7 +60,7 @@ if [ "${#ARCH_LIST[@]}" -lt 1 ]; then
     exit 1
 fi
 
-ssh -t -p ${SSH_PORT} -A ${BUILD_USER}@${BUILD_SERVER} "tatu-build -a ${ARCH} -n ${NAME} -v ${VERSION}"
+ssh -t -p ${SSH_PORT} -A ${BUILD_USER}@${BUILD_SERVER} "tatu-build -a '${ARCH}' -n ${NAME} -v ${VERSION}"
 [ $? -ne 0 ] && echo 'Git build failed.' >&2 && exit 1;
 
 # Copy built files to repository server for publishing.
