@@ -1,0 +1,10 @@
+1) Si llega a fallar la publicacion, ejecutando tatu-publish, en algun punto del final del proceso,  por ej, al ingresar la passphrase de la clave PGP, el paquete queda en un estado, no espereado y si intentamos republicarlo va a fallar tambien. Tenemos que deregistrarlo. 
+
+reprepro --basedir /srv/reprepro/ubuntu/ deleteunreferenced
+
+
+2) Se aconseja siempre en lo posible, publicar para ambas arquitecturas, sin pasar el siwtch -a a tatu-publish
+
+Por ej:
+
+    tatu-publish -n tatu-hello -v 0.21
