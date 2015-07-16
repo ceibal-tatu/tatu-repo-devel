@@ -69,7 +69,8 @@ FILE_VERSION=${VERSION/[0-9]_/}
 TEMP_BUILD_DIR=`mktemp -d`
 for arch in "${ARCH_LIST[@]}"; do
     mkdir ${TEMP_BUILD_DIR}/${arch}
-	scp -P ${SSH_PORT} ${BUILD_USER}@${BUILD_SERVER}:${BUILD_BASEDIR}/${BUILD_CODENAME}-${arch}/result/${NAME}*${FILE_VERSION}[_.]* ${TEMP_BUILD_DIR}/${arch}/ 2>&1
+    scp -P ${SSH_PORT} ${BUILD_USER}@${BUILD_SERVER}:${BUILD_BASEDIR}/${BUILD_CODENAME}-${arch}/result/${NAME}*${FILE_VERSION}[_.]* ${TEMP_BUILD_DIR}/${arch}/ 2>&1
+    scp -P ${SSH_PORT} ${BUILD_USER}@${BUILD_SERVER}:${BUILD_BASEDIR}/${BUILD_CODENAME}-${arch}/result/${NAME}*.tar.* ${TEMP_BUILD_DIR}/${arch}/ 2>&1
     if [ $? -ne 0 ]; then 
         echo "No files for ${arch} architecture."
         rm -rf ${TEMP_BUILD_DIR}/${arch}
@@ -92,7 +93,7 @@ EOF
     [ $? -ne 0 ] && echo 'Copy to server staging area failed.' >&2 && exit 1;
     for arch in "${ARCH_LIST[@]}"; do
         if [ -d ${TEMP_BUILD_DIR}/${arch}/ ]; then
-	        ssh -t -p ${SSH_PORT} ${REPO_USER}@${REPO_SERVER} "reprepro --basedir ${REPO_BASEDIR} include ${REPO_CODENAME} staging-${arch}/${NAME}_${FILE_VERSION}_*.changes"
+	        ssh -t -p ${SSH_PORT} ${REPO_USER}@${REPO_SERVER} "reprepro --basedir ${REPO_BASEDIR} include ${REPO_CODENAME} staging-${arch}/${NAME}_${FILE_VERSION}_${arch}.changes"
         fi
     done
 fi
