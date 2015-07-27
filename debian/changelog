@@ -1,3 +1,9 @@
+tatu-repo-devel (0.44) tero; urgency=medium
+
+  * Aceptar argumento en tatu-release -r 
+
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Mon, 27 Jul 2015 13:18:33 +0000
+
 tatu-repo-devel (0.43) tatu; urgency=medium
 
   * Considerar tero al publicar. 
