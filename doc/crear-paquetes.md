@@ -24,7 +24,7 @@ Al construir paquetes, especificar el profile para lintian:
 
 Crear una nueva version:
 
-    dch -i --vendor tatu
+    dch -i --vendor ceibal
 
 
 Receta 1: crear un paquete para fix

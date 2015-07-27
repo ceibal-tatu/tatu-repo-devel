@@ -1,4 +1,4 @@
-VENDOR=tatu
+VENDOR=ceibal
 LINTIAN_DIR=$(DESTDIR)/usr/share/lintian
 PROFILE_DIR=$(LINTIAN_DIR)/profiles/$(VENDOR)
 VENDOR_DATA_DIR=$(LINTIAN_DIR)/vendors/$(VENDOR)/main/data

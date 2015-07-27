@@ -2,7 +2,7 @@
 # Copiar este archivo a ~/.taturepo
 
 # Opciones para pasar por defecto a dch al ejecutar scripts de tatu.
-DCH_OPTIONS="--vendor tatu"
+DCH_OPTIONS="--vendor ceibal"
 PDEBUILD_OPTIONS="--pbuilder cowbuilder"
 GBP_BUILD_OPTIONS=""
 

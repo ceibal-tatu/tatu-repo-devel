@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+
 unset CDPATH
 
 GIT_SERVER=github.com
@@ -16,7 +16,28 @@ fi
 
 LOCAL=0
 CLEAN=0
-while getopts ":lca:n:v:" opt; do
+DEFAULT_CODENAME=$REPO_CODENAME
+DEFAULT_ARCH=$ARCH
+
+usage() {
+    cat >&2 <<USAGE
+Uso: ${0} [-c] [-a ARCH] [-l | -n <package name> -v <version>]
+    -a Construir solo para esta arquitectura (por defecto: ${ARCH}).
+    -r Repositorio donde se va a publicar el paquete (por defecto: ${DEFAULT_CODENAME}).
+    -c Borrar el directorio que contiene el código si falla la construcción.
+
+PASAR  
+    -l Construir el paquete a partir del directorio actual.
+O
+    -n Nombre del paquete. El nombre de un repositorio git que será clonado
+       para obtener el código del paquete.
+    -v La versión del paquete a publicar ('latest' para usar el último commit).
+       Indica el tag de git a partir del cual se obtendrá el código del 
+       paquete
+USAGE
+}
+
+while getopts ":hlca:n:v:r:" opt; do
     case $opt in
         a)
             ARCH=$OPTARG
@@ -27,31 +48,29 @@ while getopts ":lca:n:v:" opt; do
         v)
             VERSION=$OPTARG
             ;;
+        r)
+            REPO_CODENAME=$OPTARG
+            ;;
         l)
             LOCAL=1
             ;;
         c)
             CLEAN=1
             ;;
+        h)
+            usage
+            exit 0
+            ;;
          \?)
-           echo "Invalid option: -$OPTARG" >&2
-           ;;
+            echo "Invalid option: -$OPTARG" >&2
+            usage
+            exit 1
+            ;;
     esac
 done
 
-
 if [[ $LOCAL -eq 0  && ($NAME == "" || $VERSION == "") ]]; then
-    cat >&2 <<USAGE
-Usage: ${0} [-c] [-a ARCH] [-l | -n <package name> -v <version>]
-    -a (optional) Architecture. Defaults to 'i386 amd64'.
-    -c (optional) Clean source folder if build for first architecture fails.
-GIVE  
-    -l Build using the current folder.
-OR
-    -n Name of the package. A git repository with that name will be cloned to 
-       get the package sources.
-    -v Version of the package (or 'latest' to use latest on master branch).
-USAGE
+    usage
     exit 1
 fi
 
@@ -60,7 +79,7 @@ VERSION=$(echo $VERSION|tr ':' '_'|tr '~' '_')
 ARCH_LIST=(${ARCH})
 
 if [ "${#ARCH_LIST[@]}" -lt 1 ]; then
-    echo "Must provide at least one architecture." >&2
+    echo "Debe indicar al menos una arquitectura." >&2
     exit 1
 fi
 
@@ -79,11 +98,19 @@ if [[ $LOCAL -eq 0 ]]; then
     # Checkout tag & verify signature.
     if [[ $VERSION != "latest" ]]; then
         echo "Obteniendo tag y verificando firma."
-        git checkout "tags/${VERSION}"
-        git tag -v "${VERSION}"
-        if [ $? -ne 0 ]; then
-            echo "FIRMA INVALIDA. NO SE CONSTRUIRA EL PAQUETE." >&2 && exit 1;
-        fi
+        POSSIBLE_TAGS=(${VERSION} ${REPO_CODENAME}-${VERSION})
+        SELECTED_TAG=
+        for tag in "${POSSIBLE_TAGS[@]}"; do
+             if git rev-parse $tag >/dev/null 2>&1; then
+                 git checkout "tags/${tag}"
+                 [ $? -ne 0 ] && echo "Error: no se pudo obtener el código para el tag '${tag}'." >&2 && exit 1;
+                 git tag -v "${tag}"
+                 [ $? -ne 0 ] && echo "Error: Firma del tag '${tag}' inválida. Asegurese de que la clave GPG pública del desarrollador fue registrada en el servidor de build." >&2 && exit 1;
+                 SELECTED_TAG=${tag}
+                 break
+             fi
+        done
+        [ "${SELECTED_TAG}" == "" ] && echo "No existe un tag para ${POSSIBLE_TAGS[@]}." >&2 && exit 1;
     fi
 fi
 
@@ -102,7 +129,7 @@ if git branch|grep "pristine-tar">/dev/null; then
     sudo GIT_PBUILDER_AUTOCONF=no ARCH="${main_arch}" gbp buildpackage --git-ignore-branch --git-pristine-tar --git-arch="${main_arch}" --git-dist="${BUILD_CODENAME}" \
         --git-builder="pdebuild --architecture ${main_arch} --configfile /etc/pbuilderrc.${main_arch}.tatu --debbuildopts -sa" 
     if [[ $? -ne 0 ]]; then
-        "Fallo la construccion del paquete para la arquitectura '${main_arch}'.">&2
+        "Falló la construcción del paquete para la arquitectura '${main_arch}'.">&2
         if [[ $CLEAN -eq 1 ]]; then        
             rm -rf "${SOURCE_DIR}"
         else
@@ -127,7 +154,7 @@ else
         # Quilt package, get upstream source
         UPSTREAM_VERSION=$(sed -e "s/\(.*\)-.*/\1/" <<< "${VERSION}")
         if [ "$UPSTREAM_VERSION" == "" ]; then 
-            "No se puede determinar la version upstream para ${VERSION}."
+            "No se puede determinar la versión upstream para ${VERSION}."
             exit 1
         fi
         tatu-upstream-get -n "${NAME}" -v "${VERSION}"
@@ -137,7 +164,7 @@ else
     main_arch=${ARCH_LIST[0]}
     sudo ARCH="${main_arch}" pdebuild --architecture ${main_arch} --configfile "/etc/pbuilderrc.${main_arch}.tatu" --debbuildopts -sa 
     if [[ $? -ne 0 ]]; then
-        "Fallo la construccion del paquete para la arquitectura '${main_arch}'.">&2
+        "Falló la construcción del paquete para la arquitectura '${main_arch}'.">&2
         if [[ $CLEAN -eq 1 ]]; then        
             rm -rf "${SOURCE_DIR}"
         else
