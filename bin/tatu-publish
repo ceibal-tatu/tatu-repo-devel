@@ -132,8 +132,8 @@ for arch in "${ARCH_LIST[@]}"; do
 done
 
 if [[ ${ONLY_BUILD} -eq 0 ]]; then
-    # Copiar tatu-repo & tatu-repo-update a la raíz del servidor HTTP, y crear un link a la última versión.
-    if [ "${NAME}" = "tatu-repo" -o "${NAME}" = "tatu-repo-update" ]; then
+    # Copiar tatu-repo, tatu-repo-update & tero-repo a la raíz del servidor HTTP, y crear un link a la última versión.
+    if [ "${NAME}" = "tatu-repo" -o "${NAME}" = "tatu-repo-update" -o "${NAME}" = "tero-repo" ]; then
 	    ssh -t -p ${SSH_PORT} ${REPO_USER}@${REPO_SERVER} 'bash -sh'<<EOF
 cp staging-${ARCH_LIST[0]}/${NAME}_${FILE_VERSION}_all.deb ${REPO_WEBROOT};
 ln -f -s ${REPO_WEBROOT}/${NAME}_${FILE_VERSION}_all.deb ${REPO_WEBROOT}/${NAME}.deb
