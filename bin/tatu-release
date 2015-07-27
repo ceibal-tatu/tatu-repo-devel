@@ -54,7 +54,7 @@ Uso: $0 [-i] [-f] [-r]
 USAGE
 }
 
-while getopts ":hfi" opt; do
+while getopts ":hrfi" opt; do
   case $opt in
     i)
       INCREMENT=1
