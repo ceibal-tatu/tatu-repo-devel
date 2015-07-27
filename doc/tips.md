@@ -2,9 +2,14 @@
 
 reprepro --basedir /srv/reprepro/ubuntu/ deleteunreferenced
 
+O alternativamente, se puede exportar el repositorio:
+
+reprepro --basedir /srv/reprepro/ubuntu/ export
 
 2) Se aconseja siempre en lo posible, publicar para ambas arquitecturas, sin pasar el siwtch -a a tatu-publish
 
 Por ej:
 
     tatu-publish -n tatu-hello -v 0.21
+
+3) Para evitar ingresar la passphrase de gpg demasiadas veces al hacer export, se puede utilizar el gpg-agent.
