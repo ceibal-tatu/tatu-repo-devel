@@ -1,3 +1,9 @@
+tatu-repo-devel (0.42) tatu; urgency=medium
+
+  * Mejoras para tero. 
+
+ -- Plan Ceibal <ceibal@plan.ceibal.edu.uy>  Mon, 27 Jul 2015 01:48:39 +0000
+
 tatu-repo-devel (0.41) tatu; urgency=medium
 
   * Use pdebuild instead of git-pbuilder. 
